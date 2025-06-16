@@ -12,6 +12,27 @@ namespace EHSInventory.Models
                 context.Database.Migrate();
             }
 
+            if (!context.ProductCategories.Any())
+            {
+                context.ProductCategories.AddRange(
+                    new ProductCategory
+                    {
+                        Name = "First Aid",
+                        DisplayOrder = 1
+                    },
+                    new ProductCategory
+                    {
+                        Name = "Wellness",
+                        DisplayOrder = 2
+                    },
+                      new ProductCategory
+                    {
+                        Name = "Ergonomic",
+                        DisplayOrder = 3
+                    }
+                );
+            }
+
             context.SaveChanges();
         }
     }
