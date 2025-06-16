@@ -13,5 +13,7 @@ namespace EHSInventory.Models
         {
             // this is the db context
         }
+
+        public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
     }
 }
