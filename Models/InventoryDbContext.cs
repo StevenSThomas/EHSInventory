@@ -8,9 +8,10 @@ namespace EHSInventory.Models
 {
     public class InventoryDbContext : DbContext
     {
-        public InventoryDbContext (DbContextOptions<InventoryDbContext> options)
+        public InventoryDbContext(DbContextOptions<InventoryDbContext> options)
             : base(options)
         {
+            // this is the db context
         }
     }
 }
