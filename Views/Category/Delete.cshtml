@@ -1,0 +1,10 @@
+@model EHSInventory.Models.ProductCategory
+
+<h1>Delete @Model.Name</h1>
+
+<p>Are you sure you want to Delete category @Model.Name?</p>
+
+<form asp-action="Delete">
+    <div class="form-group">
+        <input type="submit" value="Delete" class="btn btn-primary" />
+</form>
