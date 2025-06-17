@@ -1,5 +1,7 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace EHSInventory.Models
 {
@@ -28,10 +30,10 @@ namespace EHSInventory.Models
                         DisplayOrder = 2
                     },
                       new ProductCategory
-                    {
-                        Name = "Ergonomic",
-                        DisplayOrder = 3
-                    },
+                      {
+                          Name = "Ergonomic",
+                          DisplayOrder = 3
+                      },
                     new ProductCategory
                     {
                         Name = "Extras",
@@ -73,9 +75,20 @@ namespace EHSInventory.Models
                         DisplayOrder = 11
                     }
                 );
+
+                context.SaveChanges();
             }
 
+            if (!context.Products.Any())
+            {
+                // load the Data/products.csv
+                // iterate over each row in the products csv
+                // ProductCategory category = context.ProductCategories.Where(category => category.Name == row.Category ).First();
+                // context.Products.Add(new Product { Name = , Category= category });
+                context.SaveChanges();
+            }
             context.SaveChanges();
+            
         }
     }
 }

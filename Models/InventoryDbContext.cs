@@ -15,5 +15,6 @@ namespace EHSInventory.Models
         }
 
         public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+        public DbSet<Product> Products => Set<Product>();
     }
 }

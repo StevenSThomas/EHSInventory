@@ -29,7 +29,7 @@ public class CategoryController : Controller
         if (category != null)
         {
             ViewData["Name"] = category.Name;
-            ViewData["IconUrl"] = category.IconUrl;
+            ViewData["Icon"] = category.Icon;
         }
         else
         {
@@ -45,11 +45,11 @@ public class CategoryController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ProductCategoryId", "Name", "DisplayOrder", "IconUrl")] ProductCategory category)
+    public async Task<IActionResult> Create([Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category)
     {
         if (ModelState.IsValid)
         {
-            if (category.IconUrl == null) category.IconUrl = string.Empty;
+            if (category.Icon == null) category.Icon = string.Empty;
             _context.Add(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(List));
@@ -75,7 +75,7 @@ public class CategoryController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(long id, [Bind("ProductCategoryId", "Name", "DisplayOrder", "IconUrl")] ProductCategory category)
+    public async Task<IActionResult> Edit(long id, [Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category)
     {
         if (category.ProductCategoryId != id)
         {
@@ -84,7 +84,7 @@ public class CategoryController : Controller
 
         if (ModelState.IsValid)
         {
-            if (category.IconUrl == null) category.IconUrl = string.Empty;
+            if (category.Icon == null) category.Icon = string.Empty;
             _context.Update(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(List));

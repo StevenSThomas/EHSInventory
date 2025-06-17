@@ -6,7 +6,7 @@ namespace EHSInventory.Models
     public class ProductCategory
     {
         public long? ProductCategoryId { get; set; }
-        
+
         [Required]
         [Column(TypeName = "VARCHAR")]
         [StringLength(50)]
@@ -16,6 +16,11 @@ namespace EHSInventory.Models
 
         [Column(TypeName = "VARCHAR")]
         [StringLength(255)]
-        public string? IconUrl { get; set; } = String.Empty;
+        public string? Icon { get; set; } = String.Empty;
+
+        // TODO: Products should return and collection if there
+        // are not products assigned to the category
+        public ICollection<Product>? Products { get; }
+        
     }
 }
