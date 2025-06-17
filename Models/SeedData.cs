@@ -78,17 +78,15 @@ namespace EHSInventory.Models
 
                 context.SaveChanges();
             }
-
             if (!context.Products.Any())
             {
                 // load the Data/products.csv
                 // iterate over each row in the products csv
+                //  -- loop -- 
                 // ProductCategory category = context.ProductCategories.Where(category => category.Name == row.Category ).First();
-                // context.Products.Add(new Product { Name = , Category= category });
+                // category.AddProduct(new Product {})
                 context.SaveChanges();
             }
-            context.SaveChanges();
-            
         }
     }
 }
