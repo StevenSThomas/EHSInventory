@@ -5,6 +5,7 @@ namespace EHSInventory.Models
 {
     public class ProductCategory
     {
+
         public long? ProductCategoryId { get; set; }
 
         [Required]
@@ -18,9 +19,18 @@ namespace EHSInventory.Models
         [StringLength(255)]
         public string? Icon { get; set; } = String.Empty;
 
-        // TODO: Products should return and collection if there
-        // are not products assigned to the category
-        public ICollection<Product>? Products { get; }
+        public ICollection<Product> Products { get; } = new List<Product>();
+
+        public void AddProduct(Product product)
+        {
+            var NextDisplayOrder = 0;
+            // TODO: find the maximum display order for all products in this category
+            //   NextDisplayOrder should be maximum display order + 1
+
+            
+            product.DisplayOrder = NextDisplayOrder;
+            Products.Add(product);
+        }
         
     }
 }
