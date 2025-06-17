@@ -10,7 +10,7 @@ namespace EHSInventory.Models
         [Required]
         [Column(TypeName = "VARCHAR")]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public int DisplayOrder { get; set; } = 0;
 

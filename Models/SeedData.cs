@@ -13,6 +13,7 @@ namespace EHSInventory.Models
                 context.Database.Migrate();
             }
 
+
             if (!context.ProductCategories.Any())
             {
                 context.ProductCategories.AddRange(
