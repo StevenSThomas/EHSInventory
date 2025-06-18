@@ -1,0 +1,9 @@
+@model List<ProductCategory>
+
+@foreach(var cat in Model) {
+    <p>
+        <a asp-action="Index" asp-route-id="@cat.ProductCategoryId">
+            @cat.Name
+        </a>
+    </p>
+}
