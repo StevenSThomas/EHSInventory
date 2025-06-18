@@ -157,6 +157,17 @@ public class CategoriesController : Controller
             {
                 return NotFound();
             }
+
+            var products = _context.Products.Where<Product>(p => p.Category != null && p.Category.ProductCategoryId == id);
+            if (products.Any())
+            {
+                product.DisplayOrder = await products.MaxAsync(x => x.DisplayOrder) + 1;
+            }
+            else
+            {
+                product.DisplayOrder = 1;
+            }
+
             category.Products.Add(product);
 
             _context.Products.Add(product);
