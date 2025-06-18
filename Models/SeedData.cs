@@ -22,57 +22,68 @@ namespace EHSInventory.Models
                     new ProductCategory
                     {
                         Name = "First Aid",
-                        DisplayOrder = 1
+                        DisplayOrder = 1,
+                        Icon = "FirstAid.svg"
                     },
                     new ProductCategory
                     {
                         Name = "Wellness",
-                        DisplayOrder = 2
+                        DisplayOrder = 2,
+                        Icon = "Wellness.svg"
                     },
                       new ProductCategory
                       {
                           Name = "Ergonomic",
-                          DisplayOrder = 3
+                          DisplayOrder = 3,
+                          Icon = "Ergonomic.svg"
                       },
                     new ProductCategory
                     {
                         Name = "Extras",
-                        DisplayOrder = 4
+                        DisplayOrder = 4,
+                        Icon = "Extras.svg"
                     },
                     new ProductCategory
                     {
                         Name = "Hard Hats/EHS Incentives",
-                        DisplayOrder = 5
+                        DisplayOrder = 5,
+                        Icon = "HardHat.svg"
                     },
                     new ProductCategory
                     {
                         Name = "HazCom",
-                        DisplayOrder = 6
+                        DisplayOrder = 6,
+                        Icon = "HazCom.svg"
                     },
                     new ProductCategory
                     {
                         Name = "Safety Boots",
-                        DisplayOrder = 7
+                        DisplayOrder = 7,
+                        Icon = "SafetyBoots.svg"
                     },
                     new ProductCategory
                     {
                         Name = "Fall Protection",
-                        DisplayOrder = 8
+                        DisplayOrder = 8,
+                        Icon = "FallProtection.svg"
                     },
                     new ProductCategory
                     {
                         Name = "LOTO",
-                        DisplayOrder = 9
+                        DisplayOrder = 9,
+                        Icon = "LOTO.svg"
                     },
                     new ProductCategory
                     {
                         Name = "PPE",
-                        DisplayOrder = 10
+                        DisplayOrder = 10,
+                        Icon = "PPE.svg"
                     },
                     new ProductCategory
                     {
                         Name = "IH Cabinet",
-                        DisplayOrder = 11
+                        DisplayOrder = 11,
+                        Icon = "IHCabinet.svg"
                     }
                 );
 
