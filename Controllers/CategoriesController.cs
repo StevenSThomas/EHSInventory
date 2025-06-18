@@ -42,11 +42,13 @@ public class CategoriesController : Controller
         }
     }
 
+    [Route("CreateCategory")]
     public IActionResult Create()
     {
         return View();
     }
 
+    [Route("CreateCategory")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category)
@@ -54,10 +56,12 @@ public class CategoriesController : Controller
         if (ModelState.IsValid)
         {
             if (category.Icon == null) category.Icon = string.Empty;
+            category.DisplayOrder = await _context.ProductCategories.MaxAsync(x => x.DisplayOrder) + 1;
             _context.Add(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Categories");
         }
+
         return View(category);
     }
 
@@ -121,7 +125,7 @@ public class CategoriesController : Controller
         {
             _context.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Categories");
         }
 
         return View(category);
