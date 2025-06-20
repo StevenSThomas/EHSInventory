@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Humanizer;
 
 namespace EHSInventory.Controllers;
 
