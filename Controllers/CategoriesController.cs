@@ -15,26 +15,28 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> Index(long? id)
     {
+        var allCategories = await _context.ProductCategories.ToListAsync();
+
+        var orderedCategoryList = allCategories.OrderBy(cat => cat.DisplayOrder).ToList();
+
         if (id == null)
         {
-            var allCategories = await _context.ProductCategories.ToListAsync();
-
-            var orderedCategoryList = allCategories.OrderBy(cat => cat.DisplayOrder).ToList();
-
-            return View("List", orderedCategoryList);
+            id = orderedCategoryList[0].ProductCategoryId;
         }
 
         var category = await _context.ProductCategories.FindAsync(id);
 
         if (category != null)
         {
-            ViewData["Name"] = category.Name;
-            ViewData["Icon"] = category.Icon;
-            ViewData["CategoryId"] = category.ProductCategoryId;
+            var products = _context.Products.Where<Product>(p => p.Category != null && p.Category.ProductCategoryId == id).ToList();
+            var categoryInfo = new CategoryView
+            {
+                AllCategories = orderedCategoryList,
+                CurrentCategory = category,
+                Products = products
+            };
 
-            var products = _context.Products.Where<Product>(p => p.Category != null && p.Category.ProductCategoryId == id);
-
-            return View(products);
+            return View(categoryInfo);
         }
         else
         {
@@ -59,7 +61,7 @@ public class CategoriesController : Controller
             category.DisplayOrder = await _context.ProductCategories.MaxAsync(x => x.DisplayOrder) + 1;
             _context.Add(category);
             await _context.SaveChangesAsync();
-            return Redirect("/Categories");
+            return Redirect($"/Categories/{category.ProductCategoryId}");
         }
 
         return View(category);

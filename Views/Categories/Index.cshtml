@@ -1,12 +1,12 @@
-@model IQueryable<EHSInventory.Models.Product>
+@model EHSInventory.Models.CategoryView
 
-<h1>@ViewData["Name"]</h1>
+<h1>@Model.CurrentCategory.Name</h1>
 
-<img src="@ViewData["Icon"]">
+<img src="@Model.CurrentCategory.Icon">
 
 <table>
     <tbody>
-@foreach (var product in Model) {
+@foreach (var product in Model.Products) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => product.Name)
@@ -19,4 +19,4 @@
     </tbody>
 </table>
 
-<p>Add a new product <a href="@ViewData["CategoryId"]/add">here</a></p>
+<p>Add a new product <a href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">here</a></p>

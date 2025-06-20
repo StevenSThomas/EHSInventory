@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHSInventory.Models
 {
-    public class ProductCategory
+    public class ProductCategory : IValidatableObject
     {
 
         public long? ProductCategoryId { get; set; }
@@ -31,6 +31,20 @@ namespace EHSInventory.Models
             product.DisplayOrder = NextDisplayOrder;
             Products.Add(product);
         }
-        
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var context = (InventoryDbContext?)validationContext.GetService(typeof(InventoryDbContext));
+
+            var duplicates = context?.ProductCategories.Where(cat => cat.ProductCategoryId != ProductCategoryId && cat.Name == Name);
+
+            if (duplicates != null && duplicates.Any())
+            {
+                yield return new ValidationResult(
+                    "A category with this name already exists.",
+                    new[] { nameof(Name) });
+            }
+        }
+
     }
 }
