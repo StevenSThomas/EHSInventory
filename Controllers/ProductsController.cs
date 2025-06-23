@@ -1,15 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
+using EHSInventory.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace EHSInventory.Controllers;
 
 public class ProductsController : Controller
 {
     private readonly InventoryDbContext _context;
+    private readonly IProductService _productService;
 
-    public ProductsController(InventoryDbContext context)
+    public ProductsController(InventoryDbContext context, IProductService productService)
     {
         _context = context;
+        _productService = productService;
     }
 
     public async Task<IActionResult> Index(long id) // edit
@@ -59,18 +63,34 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
+        var categoryId = product?.Category?.ProductCategoryId;
         if (product != null)
         {
+            await _productService.FixOrderAsync(id);
             _context.Remove(product);
             await _context.SaveChangesAsync();
-            if (product.Category != null)
+
+            if (categoryId != null)
             {
-                return Redirect($"/Categories/{product.Category.ProductCategoryId}");
+                return Redirect($"/Categories/{categoryId}");
             }
             return Redirect($"/Categories");
         }
         return NotFound();
 
+    }
+
+    [HttpPost, ActionName("Reorder")]
+    public async Task<IActionResult> Reorder(long id, int newPosition)
+    {
+        var success = await _productService.ReorderProductAsync(id, newPosition);
+
+        if (!success)
+        {
+            return NotFound("Invalid product ID or position.");
+        }
+
+        return Ok("Success");
     }
 }

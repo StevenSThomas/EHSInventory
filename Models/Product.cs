@@ -24,6 +24,7 @@ namespace EHSInventory.Models
         [StringLength(255)]
         public string? Name { get; set; }
 
+        [EnumDataType(typeof(ProductUnit))]
         public ProductUnit Unit { get; set; } = ProductUnit.Individual;
 
         [Range(0, int.MaxValue, ErrorMessage = "A positive quantity is required.")]
