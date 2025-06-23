@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Globalization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
@@ -92,11 +93,45 @@ namespace EHSInventory.Models
             if (!context.Products.Any())
             {
                 // load the Data/products.csv
+                string path = Path.Combine(app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().ContentRootPath, "Data", "products.csv");
+                using var reader = new StreamReader(path);
+                bool isHeader = true;
                 // iterate over each row in the products csv
-                //  -- loop -- 
-                // ProductCategory category = context.ProductCategories.Where(category => category.Name == row.Category ).First();
-                // category.AddProduct(new Product {})
-                context.SaveChanges();
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (line == null)
+                    {
+                        continue;
+                    }
+
+                    if (isHeader)
+                    {
+                        isHeader = false;
+                        continue;
+                    }
+
+                    var row = line.Split(',');
+                    string Category = row[0].Trim();
+                    string PartNumber = row[1].Trim();
+                    string Name = row[2].Trim();
+                    int Quantity = int.Parse(row[3].Trim(), CultureInfo.InvariantCulture);
+                    string Unit = row[4].Trim();
+                    string ExpiryDate = row[5].Trim();
+
+                    //  -- loop -- 
+                    ProductCategory category = context.ProductCategories.Where(category => category.Name == Category).First();
+                    category.AddProduct(new Product
+                    {
+                        Category = category,
+                        Name = Name,
+                        Quantity = Quantity,
+                        PartNumber = PartNumber,
+                        Unit = Unit
+                        ExpiryDate = ExpiryDate
+                    });
+                    context.SaveChanges();
+                }
             }
         }
     }
