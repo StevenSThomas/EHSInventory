@@ -44,4 +44,33 @@ public class ProductsController : Controller
         }
         return View(product);
     }
+
+    public async Task<IActionResult> Delete(long id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        return View(product);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(long id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product != null)
+        {
+            _context.Remove(product);
+            await _context.SaveChangesAsync();
+            if (product.Category != null)
+            {
+                return Redirect($"/Categories/{product.Category.ProductCategoryId}");
+            }
+            return Redirect($"/Categories");
+        }
+        return NotFound();
+
+    }
 }
