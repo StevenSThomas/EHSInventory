@@ -20,3 +20,44 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.topnav {
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 10px 14px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #e7e7e7;
+  color: black;
+  border-radius: 10px;
+}
+
+.topnav a.active {
+  background-color: #cdcdcd;
+  color: black;
+  border-radius: 10px;
+}
+
+.table{
+  text-align: left;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table tr{
+  border-bottom: 1px solid black;
+}
+
+.table th,td{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width:20%;
+}
