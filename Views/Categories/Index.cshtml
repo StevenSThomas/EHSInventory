@@ -2,24 +2,59 @@
 
 <h1>@Model.CurrentCategory.Name</h1>
 
+<nav>
+    <div class="topnav">
+        <a class="active" href="#FirstAid">
+            First Aid
+        </a>
+        <a href="#HazCom">
+            HazCom
+        </a>
+        <a href="#IHCabinet">
+            IH Cabinet
+        </a>
+    </div>
+</nav>
+
 <img src="@Model.CurrentCategory.Icon">
 
-<table>
+<br>
+
+<a class="btn btn-primary" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
+    <img src="@Model.CurrentCategory.Icon"/>
+    Add Product
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Expiration Date</th>
+            <th></th>
+        </tr>
+    </thead>
     <tbody>
-@foreach (var product in Model.Products) {
+    @foreach (var product in Model.Products) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => product.Name)
             </td>
             <td>
-                <a href="/Products/@product.ProductId">Edit</a>
+                @Html.DisplayFor(modelItem => product.Quantity)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => product.Unit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => product.ExpirationDate)
+            </td>
+            <td>
+                <a href="/Products/@product.ProductId">Edit</a>
                 <a href="/Products/@product.ProductId/Delete">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-
-<p>Add a new product <a href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">here</a></p>
