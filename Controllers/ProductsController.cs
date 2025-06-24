@@ -29,7 +29,7 @@ public class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(long id, [Bind("ProductId", "Category", "Name", "Unit", "Quantity", "DisplayOrder", "GrangerNum", "Description", "Photo", "ExpirationDate")] Product product)
+    public async Task<IActionResult> Index(long id, [Bind("ProductId", "Category", "Name", "Unit", "Quantity", "DisplayOrder", "GrangerNum", "Description", "Photo", "ExpirationDate")] Product product, string comment)
     {
         if (product.ProductId != id)
         {
@@ -38,8 +38,7 @@ public class ProductsController : Controller
 
         if (ModelState.IsValid)
         {
-            _context.Update(product);
-            await _context.SaveChangesAsync();
+            bool success = await _catalogService.UpdateProduct("placeholder", product, comment);
             if (product.Category != null)
             {
                 return Redirect($"/Categories/{product.Category.ProductCategoryId}"); // this doesn't work
@@ -47,6 +46,20 @@ public class ProductsController : Controller
             else return Redirect("/Categories");
         }
         return View(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SetQuantity(long id, int newQuantity, string comment)
+    {
+        Console.WriteLine(newQuantity);
+        Console.WriteLine(comment);
+        bool success = await _catalogService.SetProductQuantity("placeholder", id, newQuantity, comment);
+        if (success)
+        {
+            var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
+            return Redirect($"/Categories/{product?.Category?.ProductCategoryId}");
+        }
+        return NotFound();
     }
 
     public async Task<IActionResult> Delete(long id)

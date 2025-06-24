@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHSInventory.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20250617191842_initial")]
+    [Migration("20250624184703_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -19,6 +19,34 @@ namespace EHSInventory.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
+
+            modelBuilder.Entity("EHSInventory.Models.CategoryHistory", b =>
+                {
+                    b.Property<long>("CategoryHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryHistoryId");
+
+                    b.ToTable("CategoryHistories");
+                });
 
             modelBuilder.Entity("EHSInventory.Models.Product", b =>
                 {
@@ -85,6 +113,34 @@ namespace EHSInventory.Migrations
                     b.HasKey("ProductCategoryId");
 
                     b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("EHSInventory.Models.ProductHistory", b =>
+                {
+                    b.Property<long>("ProductHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductHistoryId");
+
+                    b.ToTable("ProductHistories");
                 });
 
             modelBuilder.Entity("EHSInventory.Models.Product", b =>

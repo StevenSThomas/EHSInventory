@@ -12,6 +12,23 @@ namespace EHSInventory.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CategoryHistories",
+                columns: table => new
+                {
+                    CategoryHistoryId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedDt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<long>(type: "INTEGER", nullable: true),
+                    ChangeType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryHistories", x => x.CategoryHistoryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductCategories",
                 columns: table => new
                 {
@@ -24,6 +41,23 @@ namespace EHSInventory.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategories", x => x.ProductCategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductHistories",
+                columns: table => new
+                {
+                    ProductHistoryId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedDt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<long>(type: "INTEGER", nullable: true),
+                    ChangeType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductHistories", x => x.ProductHistoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,6 +95,12 @@ namespace EHSInventory.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CategoryHistories");
+
+            migrationBuilder.DropTable(
+                name: "ProductHistories");
+
             migrationBuilder.DropTable(
                 name: "Products");
 
