@@ -29,7 +29,6 @@ public class ProductRepository : IProductRepository
     public async Task<long?> GetCategoryIdAsync(long? id)
     {
         var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
-        Console.WriteLine(product?.Category?.ProductCategoryId);
         return product?.Category?.ProductCategoryId;
     }
 

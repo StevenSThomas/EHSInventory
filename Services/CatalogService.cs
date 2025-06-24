@@ -1,19 +1,56 @@
 using EHSInventory.Models;
 using EHSInventory.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace EHSInventory.Services;
 
-public class ProductService : IProductService
+public class CatalogService : ICatalogService
 {
     private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly ILogger<ProductService> _logger;
+    private readonly InventoryDbContext _context;
+    private readonly ILogger<CatalogService> _logger;
 
-    public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, ILogger<ProductService> logger)
+    public CatalogService(IProductRepository productRepository, ICategoryRepository categoryRepository, InventoryDbContext context, ILogger<CatalogService> logger)
     {
         _productRepository = productRepository;
         _categoryRepository = categoryRepository;
+        _context = context;
         _logger = logger;
+    }
+
+    public async Task<bool> AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo)
+    {
+        ProductCategory? category = await _context.ProductCategories.FirstOrDefaultAsync(c => categoryName.Equals(c.Name));
+
+        if (category == null)
+        {
+            return false;
+        }
+
+        List<Product> products = _context.Products.OrderBy(p => p.DisplayOrder)
+        .Where(p => p.Category != null && p.Category.ProductCategoryId == category.ProductCategoryId)
+        .ToList();
+
+        int displayOrder = products.Max(p => p.DisplayOrder) + 1;
+
+        Product product = new Product
+        {
+            Category = category,
+            Name = name,
+            Unit = unit,
+            Quantity = quantity,
+            GrangerNum = grangerNum,
+            ExpirationDate = expirationDate,
+            DisplayOrder = displayOrder,
+            Description = description,
+            Photo = photo
+        };
+
+        _context.Add(product);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<bool> ReorderProductAsync(long id, int newPosition)
@@ -34,11 +71,10 @@ public class ProductService : IProductService
         }
         product.DisplayOrder = newPosition;
         orderedProductList.Remove(product);
-        orderedProductList.Insert(newPosition-1, product);
+        orderedProductList.Insert(newPosition - 1, product);
 
         for (int i = 1; i <= orderedProductList.Count; i++)
         {
-            Console.WriteLine(orderedProductList[i - 1].ProductId);
             orderedProductList[i - 1].DisplayOrder = i;
         }
 

@@ -8,12 +8,12 @@ namespace EHSInventory.Controllers;
 public class ProductsController : Controller
 {
     private readonly InventoryDbContext _context;
-    private readonly IProductService _productService;
+    private readonly ICatalogService _catalogService;
 
-    public ProductsController(InventoryDbContext context, IProductService productService)
+    public ProductsController(InventoryDbContext context, ICatalogService catalogService)
     {
         _context = context;
-        _productService = productService;
+        _catalogService = catalogService;
     }
 
     public async Task<IActionResult> Index(long id) // edit
@@ -67,7 +67,7 @@ public class ProductsController : Controller
         var categoryId = product?.Category?.ProductCategoryId;
         if (product != null)
         {
-            await _productService.FixOrderAsync(id);
+            await _catalogService.FixOrderAsync(id);
             _context.Remove(product);
             await _context.SaveChangesAsync();
 
@@ -84,7 +84,7 @@ public class ProductsController : Controller
     [HttpPost, ActionName("Reorder")]
     public async Task<IActionResult> Reorder(long id, int newPosition)
     {
-        var success = await _productService.ReorderProductAsync(id, newPosition);
+        var success = await _catalogService.ReorderProductAsync(id, newPosition);
 
         if (!success)
         {
