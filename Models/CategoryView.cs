@@ -7,7 +7,7 @@ namespace EHSInventory.Models
     {
         public List<ProductCategory> AllCategories { get; set; } = new List<ProductCategory>();
 
-        public ProductCategory? CurrentCategory;
+        public ProductCategory? CurrentCategory { get; set; }
 
         public List<Product> Products { get; set; } = new List<Product>();
     }

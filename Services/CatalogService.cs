@@ -19,6 +19,86 @@ public class CatalogService : ICatalogService
         _logger = logger;
     }
 
+    public async Task<List<ProductCategory>> ListCategories()
+    {
+        return await _context.ProductCategories.OrderBy(c => c.DisplayOrder).ToListAsync();
+    }
+
+    public async Task<List<Product>> ListProducts(long? catId)
+    {
+        return await _context.Products
+        .Where(p => p.Category.ProductCategoryId == catId)
+        .OrderBy(p => p.DisplayOrder)
+        .ToListAsync();
+    }
+
+    public async Task<bool> AddCategory(string userName, ProductCategory category)
+    {
+        _context.Add(category);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteCategory(string userName, long id, string comment)
+    {
+        ProductCategory? category = await _context.ProductCategories.FindAsync(id);
+        if (category == null)
+        {
+            return false;
+        }
+        
+        _context.Remove(category);
+
+        CategoryHistory history = new CategoryHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            CategoryId = category.ProductCategoryId,
+            ChangeType = CategoryHistory.changeType.delete,
+            Comment = comment
+        };
+        _context.Add(history);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> AddProduct(string userName, long id, Product product)
+    {
+        product.Category = await _context.ProductCategories.FindAsync(id);
+        var products = await ListProducts(id);
+
+        if (products.Any())
+        {
+            product.DisplayOrder = products.Max(p => p.DisplayOrder) + 1;
+        }
+        else
+        {
+            product.DisplayOrder = 1;
+        }
+        
+        _context.Add(product);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> UpdateProduct(string userName, Product product, string comment)
+    {
+        _context.Update(product);
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = product.ProductId,
+            ChangeType = ProductHistory.changeType.update,
+            Comment = comment
+        };
+        _context.Add(history);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo)
     {
         ProductCategory? category = await _context.ProductCategories.FirstOrDefaultAsync(c => categoryName.Equals(c.Name));
@@ -50,6 +130,95 @@ public class CatalogService : ICatalogService
         _context.Add(product);
         await _context.SaveChangesAsync();
 
+        return true;
+    }
+
+    public async Task<bool> DeleteProduct(string userName, long id, string comment)
+    {
+        Product? product = await _context.Products.FindAsync(id);
+        await FixOrderAsync(id);
+
+        if (product == null)
+        {
+            return false;
+        }
+        
+        _context.Remove(product);
+
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = product.ProductId,
+            ChangeType = ProductHistory.changeType.delete,
+            Comment = comment
+        };
+        _context.Add(history);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> SetProductQuantity(string userName, long id, int newQuantity, string comment)
+    {
+        Product? product = await _context.Products.FindAsync(id);
+
+        if (product == null)
+        {
+            return false;
+        }
+
+        product.Quantity = newQuantity;
+        _context.Update(product);
+        await _context.SaveChangesAsync();
+
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = id,
+            ChangeType = ProductHistory.changeType.setQuantity,
+            Comment = comment
+        };
+
+        return true;
+    }
+
+    public async Task<bool> SetProductDisplayOrder(string userName, long id, int newDisplayOrder)
+    {
+        Product? product = await _context.Products.FindAsync(id);
+
+        if (product == null)
+        {
+            return false;
+        }
+
+        await ReorderProductAsync(id, newDisplayOrder);
+
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = id,
+            ChangeType = ProductHistory.changeType.setDisplayOrder
+        };
+
+        return true;
+    }
+
+    public async Task<bool> UpdateCategory(string userName, ProductCategory category, string comment)
+    {
+        _context.Update(category);
+        CategoryHistory history = new CategoryHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            CategoryId = category.ProductCategoryId,
+            ChangeType = CategoryHistory.changeType.update,
+            Comment = comment
+        };
+        _context.Add(history);
+        await _context.SaveChangesAsync();
         return true;
     }
 

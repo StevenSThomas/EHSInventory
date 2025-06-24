@@ -1,47 +1,44 @@
 using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
 using Microsoft.EntityFrameworkCore;
+using EHSInventory.Services;
 
 namespace EHSInventory.Controllers;
 
 public class CategoriesController : Controller
 {
     private readonly InventoryDbContext _context;
+    private readonly ICatalogService _catalogService;
 
-    public CategoriesController(InventoryDbContext context)
+    public CategoriesController(InventoryDbContext context, ICatalogService catalogService)
     {
         _context = context;
+        _catalogService = catalogService;
     }
 
     public async Task<IActionResult> Index(long? id)
     {
-        var allCategories = await _context.ProductCategories.ToListAsync();
-
-        var orderedCategoryList = allCategories.OrderBy(cat => cat.DisplayOrder).ToList();
-
         if (id == null)
         {
-            id = orderedCategoryList[0].ProductCategoryId;
+            id = 1;
         }
 
-        var category = await _context.ProductCategories.FindAsync(id);
+        var products = await _catalogService.ListProducts(id);
 
-        if (category != null)
+        if (products != null)
         {
-            var products = _context.Products.Where<Product>(p => p.Category != null && p.Category.ProductCategoryId == id).ToList();
+
             var categoryInfo = new CategoryView
             {
-                AllCategories = orderedCategoryList,
-                CurrentCategory = category,
+                AllCategories = await _catalogService.ListCategories(),
+                CurrentCategory = await _context.ProductCategories.FindAsync(id),
                 Products = products
             };
 
             return View(categoryInfo);
         }
-        else
-        {
-            return NotFound();
-        }
+
+        return NotFound();
     }
 
     [Route("CreateCategory")]
@@ -57,10 +54,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            if (category.Icon == null) category.Icon = string.Empty;
-            category.DisplayOrder = await _context.ProductCategories.MaxAsync(x => x.DisplayOrder) + 1;
-            _context.Add(category);
-            await _context.SaveChangesAsync();
+            await _catalogService.AddCategory("placeholder", category);
             return Redirect($"/Categories/{category.ProductCategoryId}");
         }
 
@@ -86,7 +80,7 @@ public class CategoriesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(long id, [Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category)
+    public async Task<IActionResult> Edit(long id, [Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category, string comment)
     {
         if (category.ProductCategoryId != id)
         {
@@ -95,9 +89,7 @@ public class CategoriesController : Controller
 
         if (ModelState.IsValid)
         {
-            if (category.Icon == null) category.Icon = string.Empty;
-            _context.Update(category);
-            await _context.SaveChangesAsync();
+            await _catalogService.UpdateCategory("placeholder", category, comment);
             return RedirectToAction(nameof(Index));
         }
         return View(category);
@@ -120,17 +112,15 @@ public class CategoriesController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(long id)
+    public async Task<IActionResult> DeleteConfirmed(long id, string comment)
     {
-        var category = await _context.ProductCategories.FindAsync(id);
-        if (category != null)
+        bool success = await _catalogService.DeleteCategory("placeholder", id, comment);
+        if (success)
         {
-            _context.Remove(category);
-            await _context.SaveChangesAsync();
-            return Redirect("/Categories");
+            return RedirectToAction(nameof(Index), new {id = 1});
         }
 
-        return View(category);
+        return NotFound();
     }
 
     public async Task<IActionResult> Add(long id)
@@ -151,30 +141,13 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> AddConfirmed(long id, [Bind("ProductId", "Category", "Name", "Unit", "Quantity", "DisplayOrder", "GrangerNum", "Description", "Photo", "ExpirationDate")] Product product)
     {
-        var category = await _context.ProductCategories.FindAsync(id);
-
         if (ModelState.IsValid)
         {
-            if (category == null)
+            bool success = await _catalogService.AddProduct("placeholder", id, product);
+            if (success)
             {
-                return NotFound();
+                return Redirect($"/Categories/{id}");
             }
-
-            var products = _context.Products.Where<Product>(p => p.Category != null && p.Category.ProductCategoryId == id);
-            if (products.Any())
-            {
-                product.DisplayOrder = await products.MaxAsync(x => x.DisplayOrder) + 1;
-            }
-            else
-            {
-                product.DisplayOrder = 1;
-            }
-
-            category.Products.Add(product);
-
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { id = id });
         }
 
         return View(product);

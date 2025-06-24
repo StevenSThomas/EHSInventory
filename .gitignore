@@ -4,6 +4,7 @@
 ## Get latest from `dotnet new gitignore`
 
 ReorderTest.http
+SetQuantityTest.http
 
 # dotenv files
 .env
