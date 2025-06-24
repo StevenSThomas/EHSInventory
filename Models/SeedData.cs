@@ -2,14 +2,18 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
+using EHSInventory.Services;
 
 namespace EHSInventory.Models
 {
     public static class SeedData
     {
-        public static void EnsurePopulated(IApplicationBuilder app)
+        public static async Task EnsurePopulated(IApplicationBuilder app)
         {
             InventoryDbContext context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
+
+            ICatalogService catalog = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<ICatalogService>();
+
             if (context.Database.GetPendingMigrations().Any())
             {
                 context.Database.Migrate();
@@ -97,6 +101,24 @@ namespace EHSInventory.Models
                 // ProductCategory category = context.ProductCategories.Where(category => category.Name == row.Category ).First();
                 // category.AddProduct(new Product {})
                 context.SaveChanges();
+            }
+            bool success = await catalog.AddProduct("jacob",
+            "First Aid",
+            "chug jug",
+            0,
+            5,
+            null,
+            null,
+            String.Empty,
+            null);
+
+            if (success)
+            {
+                Console.WriteLine("it worked");
+            }
+            else
+            {
+                Console.WriteLine("didn't work");
             }
         }
     }

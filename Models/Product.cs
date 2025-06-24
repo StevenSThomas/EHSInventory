@@ -38,6 +38,8 @@ namespace EHSInventory.Models
 
         [Column(TypeName = "TEXT")]
         [Required(ErrorMessage = "A product description is required.")]
+        // Note: I think we said description shouldn't be required, but I would have to re-migrate the database to make it not required.
+        // For now, I'm just passing in String.Empty instead of null for the description to meet this requirement.
         public string Description { get; set; } = String.Empty;
 
         public string? Photo { get; set; }
