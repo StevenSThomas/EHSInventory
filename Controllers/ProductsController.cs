@@ -74,30 +74,24 @@ public class ProductsController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(long id)
+    public async Task<IActionResult> DeleteConfirmed(long id, string comment)
     {
         var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
         var categoryId = product?.Category?.ProductCategoryId;
         if (product != null)
         {
-            await _catalogService.FixOrderAsync(id);
-            _context.Remove(product);
-            await _context.SaveChangesAsync();
+            await _catalogService.DeleteProduct("placeholder", id, comment);
 
-            if (categoryId != null)
-            {
-                return Redirect($"/Categories/{categoryId}");
-            }
-            return Redirect($"/Categories");
+            return Redirect($"/Categories/{categoryId}");
         }
         return NotFound();
 
     }
 
-    [HttpPost, ActionName("Reorder")]
-    public async Task<IActionResult> Reorder(long id, int newPosition)
+    [HttpPost]
+    public async Task<IActionResult> SetDisplayOrder(long id, int newPosition)
     {
-        var success = await _catalogService.ReorderProductAsync(id, newPosition);
+        var success = await _catalogService.SetProductDisplayOrder("placeholder", id, newPosition);
 
         if (!success)
         {

@@ -5,6 +5,7 @@ public class ProductHistory
     public enum changeType
     {
         update,
+        delete,
         setQuantity,
         setDisplayOrder
     }

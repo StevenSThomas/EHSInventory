@@ -5,6 +5,12 @@
 <p>Are you sure you want to Delete product @Model.Name?</p>
 
 <form asp-action="Delete">
+    <div class="form-group"></div>
+        <label for="comment" class="control-label"></label>
+        <input id="comment" name="comment" class="form-control">Comment</label>
+    </div>
+
     <div class="form-group">
         <input type="submit" value="Delete" class="btn btn-primary" />
+    </div>
 </form>

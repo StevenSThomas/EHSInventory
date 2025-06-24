@@ -66,9 +66,20 @@ public class CatalogService : ICatalogService
     public async Task<bool> AddProduct(string userName, long id, Product product)
     {
         product.Category = await _context.ProductCategories.FindAsync(id);
+        var products = await ListProducts(id);
 
+        if (products.Any())
+        {
+            product.DisplayOrder = products.Max(p => p.DisplayOrder) + 1;
+        }
+        else
+        {
+            product.DisplayOrder = 1;
+        }
+        
         _context.Add(product);
         await _context.SaveChangesAsync();
+
         return true;
     }
 
@@ -117,6 +128,32 @@ public class CatalogService : ICatalogService
         };
 
         _context.Add(product);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteProduct(string userName, long id, string comment)
+    {
+        Product? product = await _context.Products.FindAsync(id);
+        await FixOrderAsync(id);
+
+        if (product == null)
+        {
+            return false;
+        }
+        
+        _context.Remove(product);
+
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = product.ProductId,
+            ChangeType = ProductHistory.changeType.delete,
+            Comment = comment
+        };
+        _context.Add(history);
         await _context.SaveChangesAsync();
 
         return true;
