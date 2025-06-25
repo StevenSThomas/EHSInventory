@@ -46,7 +46,7 @@ public class ImporterExporter
 
             if (row.Length < 6)
             {
-                _logger.LogWarning("Missing data from row: {Row}", line);
+                _logger.LogWarning("Row does not have enough columns: {Line}", line);
                 continue;
             }
 
@@ -55,37 +55,36 @@ public class ImporterExporter
                 string category = row[0].Trim();
                 string partNumber = row[1].Trim();
                 string name = row[2].Trim();
+                string quantityStr = row[3].Trim();
+                string unitStr = row[4].Trim().Trim('"');
+                string expiryStr = row[5].Trim();
 
-                // Quantity
-                if (!int.TryParse(row[3].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int quantity))
+                if (!int.TryParse(quantityStr, out int quantity))
                 {
-                    _logger.LogWarning("Invalid quantity '{Quantity}' for product '{Name}'", row[3], name);
-                    quantity = 0; // or skip the row if you prefer
+                    _logger.LogWarning("Invalid quantity in row: {Line}", line);
+                    quantity = 0;
                 }
 
-                // Unit (optional)
-                string unitStr = row[4].Trim();
-                ProductUnit unit = ProductUnit.Individual; // default
-                if (!string.IsNullOrWhiteSpace(unitStr))
+                ProductUnit unit = ProductUnit.Individual;
+                if (!string.IsNullOrWhiteSpace(unitStr) && unitStr != "-")
                 {
                     if (!Enum.TryParse<ProductUnit>(unitStr, true, out unit))
                     {
-                        _logger.LogWarning("Unknown unit '{Unit}' for product '{Name}', using default.", unitStr, name);
+                        _logger.LogWarning("Unknown unit '{Unit}' in row: {Line}", unitStr, line);
+                        unit = ProductUnit.Individual;
                     }
                 }
 
-                // Expiration Date (optional)
-                string expiryStr = row[5].Trim();
                 DateTime? expiry = null;
-                if (!string.IsNullOrWhiteSpace(expiryStr))
+                if (!string.IsNullOrWhiteSpace(expiryStr) && expiryStr != "-")
                 {
-                    if (!DateTime.TryParse(expiryStr, out DateTime parsedDate))
+                    if (!DateTime.TryParse(expiryStr, out var dt))
                     {
-                        _logger.LogWarning("Invalid expiration date '{Date}' for product '{Name}'", expiryStr, name);
+                        _logger.LogWarning("Invalid expiration date in row: {Line}", line);
                     }
                     else
                     {
-                        expiry = parsedDate;
+                        expiry = dt;
                     }
                 }
 
@@ -100,12 +99,13 @@ public class ImporterExporter
                     description: null,
                     photo: null
                 );
+
+                _logger.LogInformation("Imported product: {Name} ({Category})", name, category);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error importing row: {Row}", line);
             }
-
         }
 
         _logger.LogInformation("Finished importing products.");

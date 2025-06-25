@@ -13,6 +13,7 @@ namespace EHSInventory.Models
     {
         public static void EnsurePopulated(IApplicationBuilder app)
         {
+            
             InventoryDbContext context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
             if (context.Database.GetPendingMigrations().Any())
             {
