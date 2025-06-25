@@ -1,16 +1,23 @@
 @model EHSInventory.Models.Product
 
-<h1>Delete @Model.Name?</h1>
+<head>
+    <link rel="stylesheet" href="~/css/actions.css">
+</head>
+<body>
+    <main>
+        <h1>Delete @Model.Name?</h1>
 
-<p>Are you sure you want to Delete product @Model.Name?</p>
+        <p>Are you sure you want to delete product @Model.Name?</p>
 
-<form asp-action="Delete">
-    <div class="form-group"></div>
-        <label for="comment" class="control-label"></label>
-        <input id="comment" name="comment" class="form-control">Comment</label>
-    </div>
+        <form asp-action="Delete">
+            <div class="form-group"></div>
+                <label for="comment" class="control-label"></label>
+                <input id="comment" name="comment" class="form-control">Comment</label>
+            </div>
 
-    <div class="form-group">
-        <input type="submit" value="Delete" class="btn btn-primary" />
-    </div>
-</form>
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+        </form>
+    </main>
+</body>
