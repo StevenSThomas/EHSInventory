@@ -100,6 +100,8 @@ namespace EHSInventory.Models
                 var scope = app.ApplicationServices.CreateScope();
                 var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
                 importerExporter.ImportProductsAsync("products.csv", "seeddata").GetAwaiter().GetResult();
+                importerExporter.ExportProductsAsync(context, "export.csv").GetAwaiter().GetResult();
+
             }
         }
     }
