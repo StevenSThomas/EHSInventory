@@ -13,5 +13,6 @@ public class CategoryHistory
     public string CreatedBy { get; set; } = String.Empty;
     public long? CategoryId { get; set; }
     public changeType ChangeType { get; set; }
+    public string ChangeJson { get; set; } = String.Empty;
     public string Comment { get; set; } = String.Empty;
 }
