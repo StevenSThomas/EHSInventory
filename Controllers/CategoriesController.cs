@@ -107,14 +107,26 @@ public class CategoriesController : Controller
         {
             return NotFound();
         }
-        return View(category);
+
+        var deleteConfirmationView = new DeleteConfirmationView
+        {
+            Name = category.Name,
+            Comment = null
+        };
+
+        return View(deleteConfirmationView);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(long id, string comment)
+    public async Task<IActionResult> DeleteConfirmed(long id, DeleteConfirmationView deleteConfirmationView)
     {
-        bool success = await _catalogService.DeleteCategory("placeholder", id, comment);
+        if (deleteConfirmationView.Comment == null)
+        {
+            return View(new DeleteConfirmationView {Name = deleteConfirmationView.Name, Comment = null});
+        }
+
+        bool success = await _catalogService.DeleteCategory("placeholder", id, deleteConfirmationView.Comment);
         if (success)
         {
             return RedirectToAction(nameof(Index), new {id = 1});

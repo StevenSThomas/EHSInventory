@@ -85,10 +85,22 @@ public class CatalogService : ICatalogService
         return true;
     }
 
-    public async Task<bool> UpdateProduct(string userName, Product product, string comment)
+    public async Task<bool> UpdateProduct(string userName, EditProductView product, string comment)
     {
         var originalProduct = await _context.Products.FindAsync(product.ProductId);
-        _context.Entry(originalProduct).CurrentValues.SetValues(product); // THIS WORKS
+        if (originalProduct == null)
+        {
+            return false;
+        }
+
+        originalProduct.Name = product.Name;
+        originalProduct.Unit = product.Unit;
+        originalProduct.GrangerNum = product.GrangerNum;
+        originalProduct.Description = product.Description;
+        originalProduct.Photo = product.Photo;
+        originalProduct.ExpirationDate = product.ExpirationDate;
+
+        _context.Update(originalProduct);
 
         var modifiedEntries = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
         string changeJson = Compare(modifiedEntries);
