@@ -1,14 +1,13 @@
 @model EHSInventory.Models.Product
 
-<html>
-    <head>
-        <link rel="stylesheet" href="~/css/actions.css">
-    </head>
-    <body>
-        <main>
-            <h1>Edit @Model.Name</h1>
+<head>
+    <link rel="stylesheet" href="~/css/actions.css">
+</head>
+<body>
+    <main>
+        <h1>Edit @Model.Name</h1>
 
-            <form asp-action="Index">
+        <form asp-action="Index">
 
             <input type="hidden" asp-for="ProductId"/>
 
@@ -57,7 +56,6 @@
                 <input type="submit" value="Edit"/>
             </div>
 
-            </form>
-        </main>
-    </body>
-</html>
+        </form>
+    </main>
+</body>

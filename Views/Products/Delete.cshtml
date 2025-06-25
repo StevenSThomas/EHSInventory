@@ -1,18 +1,14 @@
 @model EHSInventory.Models.Product
 
-<html>
-    <head>
-        <link rel="stylesheet" href="~/css/actions.css">
-    </head>
-    <body>
-        <main>
-            <h1>Delete @Model.Name?</h1>
-
-            <p>Are you sure you want to Delete product @Model.Name?</p>
-
-            <form asp-action="Delete">
-                <input type="submit" value="Delete"/>
-            </form>
-        </main>
-    </body>
-</html>
+<head>
+    <link rel="stylesheet" href="~/css/actions.css">
+</head>
+<body>
+    <main>
+        <h1>Delete @Model.Name?</h1>
+        <p>Are you sure you want to Delete product @Model.Name?</p>
+        <form asp-action="Delete">
+            <input type="submit" value="Delete"/>
+        </form>
+    </main>
+</body>
