@@ -66,14 +66,15 @@ public class ImporterExporter
                 }
 
                 ProductUnit unit = ProductUnit.Individual;
-                if (!string.IsNullOrWhiteSpace(unitStr) && unitStr != "-")
+                if (!string.IsNullOrWhiteSpace(unitStr) && Enum.TryParse<ProductUnit>(unitStr, true, out var parsedUnit))
                 {
-                    if (!Enum.TryParse<ProductUnit>(unitStr, true, out unit))
-                    {
-                        _logger.LogWarning("Unknown unit '{Unit}' in row: {Line}", unitStr, line);
-                        unit = ProductUnit.Individual;
-                    }
+                    unit = parsedUnit;
                 }
+                else if (!string.IsNullOrWhiteSpace(unitStr))
+                {
+                    _logger.LogWarning("Invalid unit '{Unit}' in row: {Line}", unitStr, line);
+                }
+
 
                 DateTime? expiry = null;
                 if (!string.IsNullOrWhiteSpace(expiryStr) && expiryStr != "-")
