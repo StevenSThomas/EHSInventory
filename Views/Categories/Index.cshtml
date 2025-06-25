@@ -1,60 +1,71 @@
 @model EHSInventory.Models.CategoryView
 
-<h1>@Model.CurrentCategory.Name</h1>
-
-<nav>
-    <div class="topnav">
-        <a class="active" href="#FirstAid">
-            First Aid
-        </a>
-        <a href="#HazCom">
-            HazCom
-        </a>
-        <a href="#IHCabinet">
-            IH Cabinet
-        </a>
-    </div>
-</nav>
-
-<img src="@Model.CurrentCategory.Icon">
-
-<br>
-
-<a class="btn btn-primary" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
-    <img src="@Model.CurrentCategory.Icon"/>
-    Add Product
-</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th>Expiration Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var product in Model.Products) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => product.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.Unit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.ExpirationDate)
-            </td>
-            <td>
-                <a href="/Products/@product.ProductId">Edit</a>
-                <a href="/Products/@product.ProductId/Delete">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+    <nav id="sidebar">
+        <ul>
+            <li>
+                <span class="logo">EHS Inventory</span>
+            </li>
+            @foreach (var category in Model.AllCategories) {
+                @if (category.ProductCategoryId == Model.CurrentCategory.ProductCategoryId){
+                    <li class="active">
+                        <a href="/Categories/@category.ProductCategoryId">
+                            <img width="24px" src="@Url.Content("~/icons/" + category.Icon)" />
+                            <span>@Html.DisplayFor(modelCategory => category.Name)</span>
+                        </a>
+                    </li>
+                }
+                else{
+                    <li>
+                        <a href="/Categories/@category.ProductCategoryId">
+                            <img width="24px" src="@Url.Content("~/icons/" + category.Icon)" />
+                            <span>@Html.DisplayFor(modelCategory => category.Name)</span>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+    <main>
+            <h1 style="padding-bottom: 20px;">@Model.CurrentCategory.Name</h1>
+            <a class="addProduct" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
+                <span><strong>Add Product</strong></span>
+            </a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Expiration Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => product.Unit)
+                        </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => product.ExpirationDate)
+                        </td>
+                        <td>
+                            <a href="/Products/@product.ProductId">Edit</a>
+                            <a href="/Products/@product.ProductId/Delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+    </main>
+</body>

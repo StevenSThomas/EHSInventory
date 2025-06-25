@@ -1,31 +1,42 @@
 @model EHSInventory.Models.ProductCategory
+<style>
+body {
+    background-color: pink;
+}
+</style>
+<head>
 
-<h1>Edit test</h1>
+</head>
+<body>
+    <main>
+        <h1>Edit test</h1>
 
-<form asp-action="Edit">
+        <form asp-action="Edit">
 
-<input type="hidden" asp-for="ProductCategoryId" value="@ViewData["id"]" />
+        <input type="hidden" asp-for="ProductCategoryId" value="@ViewData["id"]" />
 
-<div class="form-group">
-    <label asp-for="Name" class="control-label"></label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-</div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-<div class="form-group">
-    <label asp-for="DisplayOrder" class="control-label"></label>
-    <input asp-for="DisplayOrder" class="form-control" />
-    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
-</div>
+        <div class="form-group">
+            <label asp-for="DisplayOrder" class="control-label"></label>
+            <input asp-for="DisplayOrder" class="form-control" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
 
-<div class="form-group">
-    <label asp-for="Icon" class="control-label"></label>
-    <input asp-for="Icon" class="form-control" />
-    <span asp-validation-for="Icon" class="text-danger"></span>
-</div>
+        <div class="form-group">
+            <label asp-for="Icon" class="control-label"></label>
+            <input asp-for="Icon" class="form-control" />
+            <span asp-validation-for="Icon" class="text-danger"></span>
+        </div>
 
-<div class="form-group">
-    <input type="submit" value="Edit" class="btn btn-primary" />
-</div>
+        <div class="form-group">
+            <input type="submit" value="Edit" class="btn btn-primary" />
+        </div>
 
-</form>
+        </form>
+    </main>
+</body>
