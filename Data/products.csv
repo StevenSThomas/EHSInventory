@@ -1,4 +1,4 @@
-Category, PartNumber, Name, Quantity, Unit, ExpiryDate
+Category, PartNumber, Name, Quantity, Unit, ExpirationDate
 "First Aid", "9ADL3", "Antiseptic Spray", 23, -, "2026-12-01"
 "First Aid", "12X257", "Purell Hand Sanitizer 12oz", 9, -, "2027-10-1"
 "First Aid", "12X257", "Purell Hand Sanitizer 12oz", 19,-, "2029-04-01"
@@ -35,11 +35,11 @@ Category, PartNumber, Name, Quantity, Unit, ExpiryDate
 "Wellness", -, "First Aide kit on the go", 3, -,
 "Wellness", -, "Deck of cards", 1, Bulk,
 "Wellness", -, "Poker Supplies", 1, -,
-"Wellness", -, "Wireless Comfort 5050 keyboard", 6, -,
-"Wellness", -, "Comfortfoam Mousepad", 10, -,
-"Wellness", -, "Gel Wrist Rest", 1, -,
-"Wellness", -, "Copystand", 2, -,
-"Wellness", -, "Foot Stand", 2, -,
+"Ergonomic", -, "Wireless Comfort 5050 keyboard", 6, -,
+"Ergonomic", -, "Comfortfoam Mousepad", 10, -,
+"Ergonomic", -, "Gel Wrist Rest", 1, -,
+"Ergonomic", -, "Copystand", 2, -,
+"Ergonomic", -, "Foot Stand", 2, -,
 "Hard Hats/EHS Incentives", -, "Hard hats", 26, -,
 "Hard Hats/EHS Incentives", -, "Expired covid test", 190, -,
 "Hard Hats/EHS Incentives", -, "Kershaw Barricade Knife", 5, -,
