@@ -73,26 +73,32 @@ public class CategoriesController : Controller
         {
             return NotFound();
         }
-        ViewData["id"] = id;
+        var editCategoryView = new EditCategoryView
+        {
+            ProductCategoryId = category.ProductCategoryId,
+            Name = category.Name,
+            DisplayOrder = category.DisplayOrder,
+            Icon = category.Icon
+        };
 
-        return View(category);
+        return View(editCategoryView);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(long id, [Bind("ProductCategoryId", "Name", "DisplayOrder", "Icon")] ProductCategory category, string comment)
+    public async Task<IActionResult> Edit(long id, EditCategoryView editCategoryView)
     {
-        if (category.ProductCategoryId != id)
+        if (editCategoryView.ProductCategoryId != id)
         {
             return NotFound();
         }
 
         if (ModelState.IsValid)
         {
-            await _catalogService.UpdateCategory("placeholder", category, comment);
+            await _catalogService.UpdateCategory("placeholder", editCategoryView, editCategoryView.Comment);
             return RedirectToAction(nameof(Index));
         }
-        return View(category);
+        return View(editCategoryView);
     }
 
     public async Task<IActionResult> Delete(long? id)
@@ -121,9 +127,10 @@ public class CategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id, DeleteConfirmationView deleteConfirmationView)
     {
+        var category = await _context.ProductCategories.FindAsync(id);
         if (deleteConfirmationView.Comment == null)
         {
-            return View(new DeleteConfirmationView {Name = deleteConfirmationView.Name, Comment = null});
+            return View(new DeleteConfirmationView { Name = category?.Name, Comment = null });
         }
 
         bool success = await _catalogService.DeleteCategory("placeholder", id, deleteConfirmationView.Comment);
