@@ -1,63 +1,116 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
   html {
     font-size: 16px;
   }
+}*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+    --base-clr: #ffffff;
+    --line-clr: #42434a;
+    --hover-clr: #6ae6ff86;
+    --text-clr: #000000;
+    --accent-clr: #6ae6ff;
 }
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+*{
+    margin: 0;
+    padding: 0;
 }
-
-html {
-  position: relative;
-  min-height: 100%;
+html{
+    font-family: Poppins;
+    line-height: 1.5rem;
 }
-
-body {
-  margin-bottom: 60px;
+body{
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--base-clr);
+    color: var(--text-clr);
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
-
-.topnav {
-  overflow: hidden;
+main{
+    padding: min(30px, 7%)
 }
-
-.topnav a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 10px 14px;
-  text-decoration: none;
-  font-size: 17px;
+#sidebar{
+    box-sizing: border-box;
+    height: 100vh;
+    width: auto;
+    padding: 5px 1em;
+    background-color: var(--base-clr);
+    border-right: 1px solid var(--line-clr);
+    position: sticky;
+    top: 0;
+    align-self: start;
+    overflow: auto;
 }
-
-.topnav a:hover {
-  background-color: #e7e7e7;
-  color: black;
-  border-radius: 10px;
+#sidebar ul{
+    list-style: none;
 }
-
-.topnav a.active {
-  background-color: #cdcdcd;
-  color: black;
-  border-radius: 10px;
+#sidebar > ul >li:first-child{
+    display: flex;
+    justify-content: flex-start;
+    .logo{
+        font-weight: 600;
+        font-size: 20px;
+    }
 }
-
+#sidebar ul li.active a{
+    background-color: var(--accent-clr);
+    svg{
+        fill: var(--accent-clr);
+    }
+}
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+    border-radius: .5em;
+    padding: .85em;
+    text-decoration: none;
+    color: var(--text-clr);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+#sidebar svg{
+    flex-shrink: 0;
+    fill: var(--text-clr);
+}
+#sidebar a span, #sidebar .dropdown-btn span{
+    flex-grow: 1;
+}
+#sidebar a:hover, #sidebar .dropdown-btn:hover{
+    background-color: var(--hover-clr);
+}
+.addProduct{
+    color: var(--text-clr);
+    text-decoration: none;
+    padding: 5px;
+    background-color: #6ae6ff;
+    border-style: solid;
+    border-color: var(--line-clr);
+    border-radius: 5px;
+    border-width: 2px;
+    display: inline-flex;
+    align-items: center;
+    img{
+      width: 1em;
+      padding-right: 0.2em;
+    }
+}
 .table{
-  text-align: left;
-  width: 100%;
-  border-collapse: collapse;
+    text-align: left;
+    width: 100%;
+    border-collapse: collapse;
 }
-
 .table tr{
-  border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--line-clr);
 }
-
 .table th,td{
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width:20%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width:20%;
+}
+.itemFunctions a{
+    text-decoration: none;
+    padding-right: 5px;
+    img{
+      width: 1em;
+    }
 }
