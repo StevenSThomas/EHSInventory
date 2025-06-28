@@ -102,7 +102,7 @@ namespace EHSInventory.Models
                 // category.AddProduct(new Product {})
                 context.SaveChanges();
             }
-            bool success = await catalog.AddProduct("jacob",
+            bool success = catalog.AddProduct("jacob",
             "First Aid",
             "chug jug",
             0,

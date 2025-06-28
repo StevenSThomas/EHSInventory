@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
 using Microsoft.EntityFrameworkCore;
 using EHSInventory.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EHSInventory.Controllers;
 
+[Authorize(Roles = "Safety Officer")]
 public class CategoriesController : Controller
 {
     private readonly InventoryDbContext _context;
@@ -136,7 +138,7 @@ public class CategoriesController : Controller
         bool success = await _catalogService.DeleteCategory("placeholder", id, deleteConfirmationView.Comment);
         if (success)
         {
-            return RedirectToAction(nameof(Index), new {id = 1});
+            return RedirectToAction(nameof(Index), new { id = 1 });
         }
 
         return NotFound();
