@@ -23,13 +23,23 @@ public class ProductsController : Controller
         {
             return NotFound();
         }
+        var editProductView = new EditProductView
+        {
+            ProductId = product.ProductId,
+            Name = product.Name,
+            Unit = product.Unit,
+            GrangerNum = product.GrangerNum,
+            Description = product.Description,
+            Photo = product.Photo,
+            ExpirationDate = product.ExpirationDate,
+        };
 
-        return View(product);
+        return View(editProductView);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(long id, [Bind("ProductId", "Category", "Name", "Unit", "Quantity", "DisplayOrder", "GrangerNum", "Description", "Photo", "ExpirationDate")] Product product, string comment)
+    public async Task<IActionResult> Index(long id, EditProductView product, string comment)
     {
         if (product.ProductId != id)
         {
@@ -38,12 +48,8 @@ public class ProductsController : Controller
 
         if (ModelState.IsValid)
         {
-            bool success = await _catalogService.UpdateProduct("placeholder", product, comment);
-            if (product.Category != null)
-            {
-                return Redirect($"/Categories/{product.Category.ProductCategoryId}"); // this doesn't work
-            }
-            else return Redirect("/Categories");
+            await _catalogService.UpdateProduct("placeholder", product, comment);
+            return Redirect("/Categories");
         }
         return View(product);
     }
@@ -69,22 +75,29 @@ public class ProductsController : Controller
         {
             return NotFound();
         }
-        return View(product);
+
+        return View(new DeleteConfirmationView {Name = product.Name, Comment = null });
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(long id, string comment)
+    public async Task<IActionResult> DeleteConfirmed(long id, DeleteConfirmationView deleteConfirmationView)
     {
         var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
         var categoryId = product?.Category?.ProductCategoryId;
-        if (product != null)
+        if (product == null)
         {
-            await _catalogService.DeleteProduct("placeholder", id, comment);
-
-            return Redirect($"/Categories/{categoryId}");
+            return NotFound();
         }
-        return NotFound();
+
+        if (deleteConfirmationView.Comment == null)
+        {
+            return View(new DeleteConfirmationView { Name = product.Name, Comment = null });
+        }
+
+        await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);
+        
+        return Redirect($"/Categories/{categoryId}");
 
     }
 

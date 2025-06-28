@@ -3,6 +3,7 @@ using System;
 using EHSInventory.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHSInventory.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    partial class InventoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250625033416_AddDefaultValues")]
+    partial class AddDefaultValues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
@@ -25,10 +28,6 @@ namespace EHSInventory.Migrations
 
                     b.Property<long?>("CategoryId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ChangeJson")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("ChangeType")
                         .HasColumnType("INTEGER");
