@@ -18,7 +18,7 @@ public class ImporterExporter
         _logger = logger;
     }
 
-    public async Task ImportProductsAsync(string fileName = "products.csv", string userName = "importer")
+    public void ImportProducts(string fileName = "products.csv", string userName = "importer")
     {
         string path = Path.Combine(_env.ContentRootPath, "Data", fileName);
 
@@ -33,7 +33,7 @@ public class ImporterExporter
 
         while (!reader.EndOfStream)
         {
-            var line = await reader.ReadLineAsync();
+            var line = reader.ReadLine();
             if (string.IsNullOrWhiteSpace(line)) continue;
 
             if (isHeader)
@@ -56,52 +56,41 @@ public class ImporterExporter
                 string partNumber = row[1].Trim();
                 string name = row[2].Trim();
                 string quantityStr = row[3].Trim();
-                string unitStr = row[4].Trim().Trim('"');
+                string unitStr = row[4].Trim();
                 string expiryStr = row[5].Trim();
 
                 if (!int.TryParse(quantityStr, out int quantity))
                 {
                     _logger.LogWarning("Invalid quantity in row: {Line}", line);
-                    quantity = 0;
+                    continue;
                 }
 
                 ProductUnit unit = ProductUnit.Individual;
-                if (!string.IsNullOrWhiteSpace(unitStr) && Enum.TryParse<ProductUnit>(unitStr, true, out var parsedUnit))
+                if (!string.IsNullOrEmpty(unitStr) && Enum.TryParse<ProductUnit>(unitStr, true, out var parsedUnit))
                 {
                     unit = parsedUnit;
                 }
-                else if (!string.IsNullOrWhiteSpace(unitStr))
-                {
-                    _logger.LogWarning("Invalid unit '{Unit}' in row: {Line}", unitStr, line);
-                }
-
 
                 DateTime? expiry = null;
-                if (!string.IsNullOrWhiteSpace(expiryStr) && expiryStr != "-")
+                if (!string.IsNullOrWhiteSpace(expiryStr) && DateTime.TryParse(expiryStr, out var parsedDate))
                 {
-                    if (!DateTime.TryParse(expiryStr, out var dt))
-                    {
-                        _logger.LogWarning("Invalid expiration date in row: {Line}", line);
-                    }
-                    else
-                    {
-                        expiry = dt;
-                    }
+                    expiry = parsedDate;
                 }
 
-                await _catalogService.AddProduct(
+                var success = _catalogService.AddProduct(
                     userName,
                     category,
                     name,
                     unit,
                     quantity,
-                    grangerNum: partNumber,
-                    expirationDate: expiry,
-                    description: null,
-                    photo: null
-                );
+                    partNumber,
+                    expiry,
+                    null,
+                    null
+                ).GetAwaiter().GetResult();
 
-                _logger.LogInformation("Imported product: {Name} ({Category})", name, category);
+                if (success)
+                    _logger.LogInformation("Imported product: \"{Name}\" (\"{Category}\")", name, category);
             }
             catch (Exception ex)
             {
@@ -112,12 +101,12 @@ public class ImporterExporter
         _logger.LogInformation("Finished importing products.");
     }
 
-    public async Task ExportProductsAsync(InventoryDbContext context, string fileName = "export.csv")
+    public void ExportProducts(InventoryDbContext context, string fileName = "export.csv")
     {
         string path = Path.Combine(_env.ContentRootPath, "Data", fileName);
 
         using var writer = new StreamWriter(path);
-        await writer.WriteLineAsync("Category,PartNumber,Name,Quantity,Unit,ExpirationDate");
+        writer.WriteLineAsync("Category,PartNumber,Name,Quantity,Unit,ExpirationDate");
 
         var products = context.Products.Include(p => p.Category).ToList();
 
@@ -132,7 +121,7 @@ public class ImporterExporter
                 p.ExpirationDate?.ToString("yyyy-MM-dd") ?? ""
             );
 
-            await writer.WriteLineAsync(line);
+            writer.WriteLineAsync(line);
         }
 
         _logger.LogInformation("Exported {Count} products to {Path}", products.Count, path);

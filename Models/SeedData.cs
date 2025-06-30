@@ -62,32 +62,26 @@ namespace EHSInventory.Models
                     },
                     new ProductCategory
                     {
-                        Name = "Safety Boots",
-                        DisplayOrder = 7,
-                        Icon = "SafetyBoots.svg"
-                    },
-                    new ProductCategory
-                    {
                         Name = "Fall Protection",
-                        DisplayOrder = 8,
+                        DisplayOrder = 7,
                         Icon = "FallProtection.svg"
                     },
                     new ProductCategory
                     {
                         Name = "LOTO",
-                        DisplayOrder = 9,
+                        DisplayOrder = 8,
                         Icon = "LOTO.svg"
                     },
                     new ProductCategory
                     {
                         Name = "PPE",
-                        DisplayOrder = 10,
+                        DisplayOrder = 9,
                         Icon = "PPE.svg"
                     },
                     new ProductCategory
                     {
                         Name = "IH Cabinet",
-                        DisplayOrder = 11,
+                        DisplayOrder = 10,
                         Icon = "IHCabinet.svg"
                     }
                 );
@@ -99,8 +93,8 @@ namespace EHSInventory.Models
             {
                 var scope = app.ApplicationServices.CreateScope();
                 var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
-                importerExporter.ImportProductsAsync("products.csv", "seeddata").GetAwaiter().GetResult();
-                importerExporter.ExportProductsAsync(context, "export.csv").GetAwaiter().GetResult();
+                importerExporter.ImportProducts("products.csv", "seeddata");
+                importerExporter.ExportProducts(context, "export.csv");
 
             }
         }
