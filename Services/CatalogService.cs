@@ -98,8 +98,18 @@ public class CatalogService : ICatalogService
         return true;
     }
 
-    public async Task<bool> AddProduct(string userName, long id, Product product)
+    public async Task<bool> AddProduct(string userName, long id, EditProductView productView)
     {
+        Product product = new Product
+        {
+            Name = productView.Name,
+            Unit = productView.Unit,
+            GrangerNum = productView.GrangerNum,
+            Description = productView.Description,
+            Photo = productView.Photo,
+            ExpirationDate = productView.ParsedDate ?? null
+        };
+
         product.Category = await _context.ProductCategories.FindAsync(id);
         var products = await ListProducts(id);
 
@@ -161,11 +171,12 @@ public class CatalogService : ICatalogService
         }
 
         originalProduct.Name = product.Name;
+        originalProduct.Quantity = product.Quantity;
         originalProduct.Unit = product.Unit;
         originalProduct.GrangerNum = product.GrangerNum;
         originalProduct.Description = product.Description;
         originalProduct.Photo = product.Photo;
-        originalProduct.ExpirationDate = product.ExpirationDate;
+        originalProduct.ExpirationDate = product.ParsedDate;
 
         _context.Update(originalProduct);
 

@@ -25,13 +25,14 @@ public class ProductsController : Controller
         }
         var editProductView = new EditProductView
         {
-            ProductId = product.ProductId,
+            ProductId = id,
             Name = product.Name,
+            Quantity = product.Quantity,
             Unit = product.Unit,
             GrangerNum = product.GrangerNum,
             Description = product.Description,
             Photo = product.Photo,
-            ExpirationDate = product.ExpirationDate,
+            ExpirationDate = product.ExpirationDate?.ToString("MM/dd/yyyy") ?? String.Empty
         };
 
         return View(editProductView);
@@ -57,8 +58,6 @@ public class ProductsController : Controller
     [HttpPost]
     public async Task<IActionResult> SetQuantity(long id, int newQuantity, string comment)
     {
-        Console.WriteLine(newQuantity);
-        Console.WriteLine(comment);
         bool success = await _catalogService.SetProductQuantity("placeholder", id, newQuantity, comment);
         if (success)
         {

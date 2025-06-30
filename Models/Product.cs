@@ -13,7 +13,7 @@ namespace EHSInventory.Models
         Roll=4
     }
 
-    public class Product : IValidatableObject
+    public class Product
     {
         public long? ProductId { get; set; }
 
@@ -46,23 +46,5 @@ namespace EHSInventory.Models
 
         [Column(TypeName = "DATE")]
         public DateTime? ExpirationDate { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var context = (InventoryDbContext?)validationContext.GetService(typeof(InventoryDbContext));
-
-            var duplicates = context?.Products.Where(prod =>
-            prod.ProductId != ProductId
-            && prod.Name != null
-            && prod.Name.Equals(Name)
-            && prod.Unit == Unit);
-
-            if (duplicates != null && duplicates.Any())
-            {
-                yield return new ValidationResult(
-                    "A product with this name and unit already exists.",
-                    new[] { nameof(Name)});
-            }
-        }
     }
 }

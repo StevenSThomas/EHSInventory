@@ -160,17 +160,25 @@ public class CategoriesController : Controller
     [HttpPost, ActionName("Add")]
     [ValidateAntiForgeryToken]
 
-    public async Task<IActionResult> AddConfirmed(long id, [Bind("ProductId", "Category", "Name", "Unit", "Quantity", "DisplayOrder", "GrangerNum", "Description", "Photo", "ExpirationDate")] Product product)
+    public async Task<IActionResult> AddConfirmed(long id, EditProductView productView)
     {
         if (ModelState.IsValid)
         {
-            bool success = await _catalogService.AddProduct("placeholder", id, product);
+            bool success = await _catalogService.AddProduct("placeholder", id, productView);
             if (success)
             {
                 return Redirect($"/Categories/{id}");
             }
         }
 
-        return View(product);
+        var category = await _context.ProductCategories.FindAsync(id);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+        ViewData["Category Name"] = category.Name;
+
+        return View(productView);
     }
 }

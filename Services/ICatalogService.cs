@@ -9,7 +9,7 @@ public interface ICatalogService
     Task<bool> AddCategory(string userName, ProductCategory category);
     Task<bool> UpdateCategory(string userName, EditCategoryView category, string comment);
     Task<bool> DeleteCategory(string userName, long id, string comment);
-    Task<bool> AddProduct(string userName, long id, Product product);
+    Task<bool> AddProduct(string userName, long id, EditProductView product);
     bool AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo);
     Task<bool> UpdateProduct(string userName, EditProductView product, string comment);
     Task<bool> DeleteProduct(string userName, long id, string comment);
