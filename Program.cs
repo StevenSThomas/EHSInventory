@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using EHSInventory.Persistence;
 using EHSInventory.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using EHSInventory.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<InventoryDbContext>(
 );
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<ImporterExporter>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

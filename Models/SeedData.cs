@@ -1,19 +1,20 @@
 using System.ComponentModel;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 using EHSInventory.Services;
+using EHSInventory.Utils;
 
 namespace EHSInventory.Models
 {
     public static class SeedData
     {
-        public static async Task EnsurePopulated(IApplicationBuilder app)
+        public static void EnsurePopulated(IApplicationBuilder app)
         {
+            
             InventoryDbContext context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
-
-            ICatalogService catalog = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<ICatalogService>();
-
             if (context.Database.GetPendingMigrations().Any())
             {
                 context.Database.Migrate();
@@ -61,65 +62,45 @@ namespace EHSInventory.Models
                     },
                     new ProductCategory
                     {
-                        Name = "Safety Boots",
-                        DisplayOrder = 7,
-                        Icon = "SafetyBoots.svg"
-                    },
-                    new ProductCategory
-                    {
                         Name = "Fall Protection",
-                        DisplayOrder = 8,
+                        DisplayOrder = 7,
                         Icon = "FallProtection.svg"
                     },
                     new ProductCategory
                     {
                         Name = "LOTO",
-                        DisplayOrder = 9,
+                        DisplayOrder = 8,
                         Icon = "LOTO.svg"
                     },
                     new ProductCategory
                     {
                         Name = "PPE",
-                        DisplayOrder = 10,
+                        DisplayOrder = 9,
                         Icon = "PPE.svg"
                     },
                     new ProductCategory
                     {
                         Name = "IH Cabinet",
-                        DisplayOrder = 11,
+                        DisplayOrder = 10,
                         Icon = "IHCabinet.svg"
                     }
                 );
 
                 context.SaveChanges();
             }
+
             if (!context.Products.Any())
             {
-                // load the Data/products.csv
-                // iterate over each row in the products csv
-                //  -- loop -- 
-                // ProductCategory category = context.ProductCategories.Where(category => category.Name == row.Category ).First();
-                // category.AddProduct(new Product {})
-                context.SaveChanges();
-            }
-            bool success = catalog.AddProduct("jacob",
-            "First Aid",
-            "chug jug",
-            0,
-            5,
-            null,
-            null,
-            String.Empty,
-            null);
+                var scope = app.ApplicationServices.CreateScope();
+                var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
+                var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger("SeedData");
+                importerExporter.ImportProducts("products.csv", "seeddata");
+                context.Dispose();
+                context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
+                logger.LogInformation("Product count before export: {Count}", context.Products.Count());
+                importerExporter.ExportProducts(context, "export.csv");
 
-            if (success)
-            {
-                Console.WriteLine("it worked");
-            }
-            else
-            {
-                Console.WriteLine("didn't work");
             }
         }
     }
-}
+    }
