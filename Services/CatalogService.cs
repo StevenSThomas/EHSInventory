@@ -1,6 +1,8 @@
 using EHSInventory.Models;
 using EHSInventory.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EHSInventory.Services;
 
@@ -39,6 +41,39 @@ public class CatalogService : ICatalogService
         return true;
     }
 
+        public async Task<bool> UpdateCategory(string userName, EditCategoryView category, string comment)
+    {
+        var originalCategory = await _context.ProductCategories.FindAsync(category.ProductCategoryId);
+
+        if (originalCategory == null)
+        {
+            return false;
+        }
+
+        originalCategory.ProductCategoryId = category.ProductCategoryId;
+        originalCategory.Name = category.Name;
+        originalCategory.DisplayOrder = category.DisplayOrder;
+        originalCategory.Icon = category.Icon;
+
+        _context.Update(originalCategory);
+        
+        var modifiedEntries = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+        string changeJson = Compare(modifiedEntries);
+        CategoryHistory history = new CategoryHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            CategoryId = category.ProductCategoryId,
+            ChangeType = CategoryHistory.changeType.update,
+            ChangeJson = changeJson,
+            Comment = comment
+        };
+        _context.Add(history);
+        
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> DeleteCategory(string userName, long id, string comment)
     {
         ProductCategory? category = await _context.ProductCategories.FindAsync(id);
@@ -46,7 +81,7 @@ public class CatalogService : ICatalogService
         {
             return false;
         }
-        
+
         _context.Remove(category);
 
         CategoryHistory history = new CategoryHistory
@@ -76,32 +111,16 @@ public class CatalogService : ICatalogService
         {
             product.DisplayOrder = 1;
         }
-        
+
         _context.Add(product);
         await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public async Task<bool> UpdateProduct(string userName, Product product, string comment)
+        public bool AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo)
     {
-        _context.Update(product);
-        ProductHistory history = new ProductHistory
-        {
-            CreatedDt = DateTime.Now,
-            CreatedBy = userName,
-            ProductId = product.ProductId,
-            ChangeType = ProductHistory.changeType.update,
-            Comment = comment
-        };
-        _context.Add(history);
-        await _context.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo)
-    {
-        ProductCategory? category = await _context.ProductCategories.FirstOrDefaultAsync(c => categoryName.Equals(c.Name));
+        ProductCategory? category = _context.ProductCategories.FirstOrDefault(c => categoryName.Equals(c.Name));
 
         if (category == null)
         {
@@ -128,8 +147,42 @@ public class CatalogService : ICatalogService
         };
 
         _context.Add(product);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
+        return true;
+    }
+
+    public async Task<bool> UpdateProduct(string userName, EditProductView product, string comment)
+    {
+        var originalProduct = await _context.Products.FindAsync(product.ProductId);
+        if (originalProduct == null)
+        {
+            return false;
+        }
+
+        originalProduct.Name = product.Name;
+        originalProduct.Unit = product.Unit;
+        originalProduct.GrangerNum = product.GrangerNum;
+        originalProduct.Description = product.Description;
+        originalProduct.Photo = product.Photo;
+        originalProduct.ExpirationDate = product.ExpirationDate;
+
+        _context.Update(originalProduct);
+
+        var modifiedEntries = _context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified);
+        string changeJson = Compare(modifiedEntries);
+
+        ProductHistory history = new ProductHistory
+        {
+            CreatedDt = DateTime.Now,
+            CreatedBy = userName,
+            ProductId = product.ProductId,
+            ChangeType = ProductHistory.changeType.update,
+            ChangeJson = changeJson,
+            Comment = comment
+        };
+        _context.Add(history);
+        await _context.SaveChangesAsync();
         return true;
     }
 
@@ -142,7 +195,7 @@ public class CatalogService : ICatalogService
         {
             return false;
         }
-        
+
         _context.Remove(product);
 
         ProductHistory history = new ProductHistory
@@ -168,9 +221,9 @@ public class CatalogService : ICatalogService
             return false;
         }
 
+        string changeJson = CompareProducts(ProductHistory.changeType.setQuantity, product.Quantity, newQuantity);
         product.Quantity = newQuantity;
         _context.Update(product);
-        await _context.SaveChangesAsync();
 
         ProductHistory history = new ProductHistory
         {
@@ -178,8 +231,12 @@ public class CatalogService : ICatalogService
             CreatedBy = userName,
             ProductId = id,
             ChangeType = ProductHistory.changeType.setQuantity,
+            ChangeJson = changeJson,
             Comment = comment
         };
+
+        _context.Add(history);
+        await _context.SaveChangesAsync();
 
         return true;
     }
@@ -193,6 +250,7 @@ public class CatalogService : ICatalogService
             return false;
         }
 
+        string changeJson = CompareProducts(ProductHistory.changeType.setDisplayOrder, product.DisplayOrder, newDisplayOrder);
         await ReorderProductAsync(id, newDisplayOrder);
 
         ProductHistory history = new ProductHistory
@@ -200,25 +258,12 @@ public class CatalogService : ICatalogService
             CreatedDt = DateTime.Now,
             CreatedBy = userName,
             ProductId = id,
-            ChangeType = ProductHistory.changeType.setDisplayOrder
-        };
-
-        return true;
-    }
-
-    public async Task<bool> UpdateCategory(string userName, ProductCategory category, string comment)
-    {
-        _context.Update(category);
-        CategoryHistory history = new CategoryHistory
-        {
-            CreatedDt = DateTime.Now,
-            CreatedBy = userName,
-            CategoryId = category.ProductCategoryId,
-            ChangeType = CategoryHistory.changeType.update,
-            Comment = comment
+            ChangeType = ProductHistory.changeType.setDisplayOrder,
+            ChangeJson = changeJson
         };
         _context.Add(history);
         await _context.SaveChangesAsync();
+
         return true;
     }
 
@@ -262,7 +307,6 @@ public class CatalogService : ICatalogService
         var categoryId = await _productRepository.GetCategoryIdAsync(id);
         var products = await _categoryRepository.GetProductsOrderedAsync(categoryId);
 
-
         var displayOrder = 1;
         foreach (Product p in products)
         {
@@ -276,5 +320,41 @@ public class CatalogService : ICatalogService
         await _productRepository.SaveChangesAsync();
 
         return true;
+    }
+
+    public static string Compare(IEnumerable<EntityEntry> modifiedEntries)
+    {
+        var entry = modifiedEntries.First();
+        List<Change> changes = new List<Change>();
+
+        foreach (var property in entry.Properties)
+        {
+            if (property.IsModified)
+            {
+                var change = new Change
+                {
+                    FieldChanged = property.Metadata.Name ?? String.Empty,
+                    Before = property.OriginalValue?.ToString() ?? String.Empty,
+                    After = property.CurrentValue?.ToString() ?? String.Empty
+                };
+                changes.Add(change);
+            }
+        }
+
+        return JsonSerializer.Serialize(changes);
+    }
+
+    public static string CompareProducts(ProductHistory.changeType changeType, int before, int after)
+    {
+        List<Change> changes = new List<Change>();
+        Change change = new Change
+        {
+            FieldChanged = changeType.ToString(),
+            Before = before.ToString(),
+            After = after.ToString()
+        };
+        changes.Add(change);
+
+        return JsonSerializer.Serialize(changes);
     }
 }

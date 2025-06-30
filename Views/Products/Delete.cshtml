@@ -1,4 +1,4 @@
-@model EHSInventory.Models.Product
+@model EHSInventory.Models.DeleteConfirmationView
 
 <head>
     <link rel="stylesheet" href="~/css/actions.css">
@@ -9,11 +9,12 @@
 
         <p>Are you sure you want to delete product @Model.Name?</p>
 
-        <form asp-action="Delete">
-            <div class="form-group"></div>
-                <label for="comment" class="control-label"></label>
-                <input id="comment" name="comment" class="form-control">Comment</label>
-            </div>
+<form asp-action="Delete">
+    <div class="form-group">
+        <label asp-for="Comment" class="control-label"></label>
+        <input asp-for="Comment" class="form-control" />
+        <span asp-validation-for="Comment" class="text-danger"></span>
+  </div>
 
             <div class="form-group">
                 <input type="submit" value="Delete" class="btn btn-primary" />

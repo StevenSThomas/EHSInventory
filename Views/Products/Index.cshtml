@@ -1,4 +1,5 @@
-@model EHSInventory.Models.Product
+
+@model EHSInventory.Models.EditProductView
 
 <head>
     <link rel="stylesheet" href="~/css/actions.css">
@@ -47,10 +48,11 @@
         </div>
 
         <div class="form-group">
-            <label for="Comment" class="control-label">Comment</label>
-            <input name="Comment" class="form-control" />
+            <label asp-for="Comment" class="control-label"></label>
+            <input asp-for="Comment" class="form-control" />
+            <span asp-validation-for="Comment" class="text-danger"></span>
         </div>
-
+          
         <div class="form-group">
             <input type="submit" value="Edit" class="btn btn-primary" />
         </div>
