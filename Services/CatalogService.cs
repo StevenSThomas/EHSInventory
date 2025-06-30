@@ -131,7 +131,7 @@ public class CatalogService : ICatalogService
         .Where(p => p.Category != null && p.Category.ProductCategoryId == category.ProductCategoryId)
         .ToList();
 
-        int displayOrder = products.Max(p => p.DisplayOrder) + 1;
+        int displayOrder = products.Any() ? products.Max(p => p.DisplayOrder) + 1 : 1;
 
         Product product = new Product
         {

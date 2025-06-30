@@ -85,12 +85,14 @@ public class ImporterExporter
                     quantity,
                     partNumber,
                     expiry,
-                    null,
-                    null
+                    "",
+                    "" 
                 );
 
                 if (success)
                     _logger.LogInformation("Imported product: \"{Name}\" (\"{Category}\")", name, category);
+                else
+                    _logger.LogWarning("Failed to import product: {Name} (Category: {Category}) - Category may not exist or other issue.", name, category);
             }
             catch (Exception ex)
             {
