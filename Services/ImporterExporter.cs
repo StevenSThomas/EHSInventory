@@ -77,7 +77,7 @@ public class ImporterExporter
                     expiry = parsedDate;
                 }
 
-                var success = _catalogService.AddProduct(
+                bool success = _catalogService.AddProduct(
                     userName,
                     category,
                     name,
@@ -87,7 +87,7 @@ public class ImporterExporter
                     expiry,
                     null,
                     null
-                ).GetAwaiter().GetResult();
+                );
 
                 if (success)
                     _logger.LogInformation("Imported product: \"{Name}\" (\"{Category}\")", name, category);
@@ -106,7 +106,7 @@ public class ImporterExporter
         string path = Path.Combine(_env.ContentRootPath, "Data", fileName);
 
         using var writer = new StreamWriter(path);
-        writer.WriteLineAsync("Category,PartNumber,Name,Quantity,Unit,ExpirationDate");
+        writer.WriteLine("Category,PartNumber,Name,Quantity,Unit,ExpirationDate");
 
         var products = context.Products.Include(p => p.Category).ToList();
 
@@ -121,7 +121,7 @@ public class ImporterExporter
                 p.ExpirationDate?.ToString("yyyy-MM-dd") ?? ""
             );
 
-            writer.WriteLineAsync(line);
+            writer.WriteLine(line);
         }
 
         _logger.LogInformation("Exported {Count} products to {Path}", products.Count, path);
