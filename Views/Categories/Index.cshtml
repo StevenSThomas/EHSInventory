@@ -58,7 +58,7 @@
                         @Html.DisplayFor(modelItem => product.Unit)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => product.ExpirationDate)
+                        @(product.ExpirationDate?.ToString("MM/dd/yyyy"))
                     </td>
                     <td class="itemFunctions">
                         <a href="/Products/@product.ProductId">
