@@ -1,0 +1,62 @@
+@model EHSInventory.Models.EditProductView
+
+<head>
+    <link rel="stylesheet" href="~/css/actions.css">
+</head>
+<body>
+    <main>
+        <div class="wrapper">
+            <h1>Edit @Model.Name</h1>
+
+            <form asp-action="Edit">
+
+            <input type="hidden" asp-for="ProductId"/>
+
+            <div class="field">
+                <label asp-for="Name">Name</label><br/>
+                <input asp-for="Name"/><br/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="quantity">
+                <label asp-for="Quantity">Quantity</label><br/>
+                <input asp-for="Quantity"/><br/>
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="unit">
+                <label asp-for="Unit">Unit</label><br/>
+                <select asp-for="Unit" asp-items="Html.GetEnumSelectList<ProductUnit>()"></select>
+            </div>
+            <div class="field">
+                <label asp-for="GrangerNum">Grainger Number</label><br/>
+                <input asp-for="GrangerNum"/><br/>
+                <span asp-validation-for="GrangerNum" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Description">Description</label><br/>
+                <input asp-for="Description"/><br/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <!--<div class="field">
+                <label asp-for="Photo">Photo</label><br/>
+                <input asp-for="Photo"/><br/>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>-->
+            <div class="field">
+                <label asp-for="ExpirationDate">Expiration Date</label><br/>
+                <input asp-for="ExpirationDate"/><br/>
+                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Comment">Comment</label><br/>
+                <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="buttons">
+                <input type="submit" value="Apply Changes" class="submit"/>
+                <a class="cancel" href="/Categories/@Model.CategoryId">Cancel</a>
+            </div>
+
+            </form>
+        </div>
+    </main>
+</body>

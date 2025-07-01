@@ -16,7 +16,33 @@ public class ProductsController : Controller
         _catalogService = catalogService;
     }
 
-    public async Task<IActionResult> Index(long id) // edit
+    public async Task<IActionResult> Index(long id)
+    {
+        var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        var productView = new ProductView
+        {
+            ProductId = id,
+            Name = product.Name,
+            Quantity = product.Quantity,
+            Unit = product.Unit,
+            GrangerNum = product.GrangerNum,
+            Description = product.Description,
+            Photo = product.Photo,
+            ExpirationDate = product.ExpirationDate,
+            CategoryId = product.Category.ProductCategoryId
+        };
+
+        var productHistories = await _context.ProductHistories.Where(h => h.ProductId == id).ToListAsync();
+        productView.ProductHistories = productHistories;
+
+        return View(productView);
+    }
+
+    public async Task<IActionResult> Edit(long id) // edit
     {
         var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
         if (product == null)
@@ -41,7 +67,7 @@ public class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(long id, EditProductView product, string comment)
+    public async Task<IActionResult> Edit(long id, EditProductView product, string comment)
     {
         if (product.ProductId != id)
         {
