@@ -16,8 +16,6 @@ public class EditProductView : IValidatableObject
     [Range(0, int.MaxValue, ErrorMessage = "A positive quantity is required.")]
     public int Quantity { get; set; }
 
-    public int Quantity { get; set; }
-
     public ProductUnit Unit { get; set; } = ProductUnit.Individual;
 
     [StringLength(50)]

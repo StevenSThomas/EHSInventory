@@ -44,9 +44,9 @@
                 <input asp-for="ExpirationDate"/><br/>
                 <span asp-validation-for="ExpirationDate" class="text-danger"></span>
             </div>
-            <div>
+            <div class="buttons">
                 <input type="submit" value="Add" class="submit"/>
-                <a href="/Categories/Index.cshtml" class="submit">Cancel</a>
+                <a class="cancel" href="/Categories/@Model.CategoryId">Cancel</a>
             </div>
 
             </form>

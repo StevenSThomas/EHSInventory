@@ -25,7 +25,7 @@ body{
     align-items: center;
 }
 .wrapper{
-    position:fixed;
+    position: fixed;
     box-sizing: border-box;
     background-color: var(--base-clr);
     height: auto;

@@ -6,6 +6,7 @@
     --text-clr: #000000;
     --accent-clr: #6ae6ff;
     --error-clr: #ff3030;
+    --error-hvr: #ff303086;
 }
 *{
     margin: 0;
@@ -61,15 +62,18 @@ form{
     resize: none;
     overflow: scroll;
 }
+.buttons{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
 .submit{
-    display: inline-block;
-    text-decoration: none;
     border-style: solid;
     border-width: 2px;
     border-color: var(--line-clr);
     border-radius: 5px;
-    /*padding: 4rem;*/
-    width: 100px;
+    height: 3rem;
+    width: 10rem;
     background-color: var(--hover-clr);
     color: var(--text-clr);
     font: inherit;
@@ -79,6 +83,29 @@ form{
 }
 .submit:hover{
     background-color: var(--accent-clr);
+}
+.cancel{
+    text-decoration: none;
+    /*text-align: center;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 2px;
+    border-color: var(--line-clr);
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 3rem;
+    width: 10rem;
+    background-color: var(--error-hvr);
+    color: var(--text-clr);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 150ms ease;
+}
+.cancel:hover{
+    background-color: var(--error-clr);
 }
 .text-danger{
     font-size: 0.75rem;
