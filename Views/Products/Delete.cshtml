@@ -5,20 +5,19 @@
 </head>
 <body>
     <main>
-        <h1>Delete @Model.Name?</h1>
-
-        <p>Are you sure you want to delete product @Model.Name?</p>
-
-<form asp-action="Delete">
-    <div class="form-group">
-        <label asp-for="Comment" class="control-label"></label>
-        <input asp-for="Comment" class="form-control" />
-        <span asp-validation-for="Comment" class="text-danger"></span>
-  </div>
-
-            <div class="form-group">
-                <input type="submit" value="Delete" class="btn btn-primary" />
-            </div>
-        </form>
+        <div class="wrapper">
+            <h1>Delete @Model.Name?</h1>
+            <p>Are you sure you want to delete product @Model.Name?</p>
+            <form asp-action="Delete">
+                <div class="field">
+                    <label for="comment">Comment</label><br/>
+                    <textarea name="comment" id="comment" placeholder="Comment"></textarea>
+                </div>
+                <div class="buttons">
+                    <input type="submit" value="Delete" class="submit">
+                    <a class="cancel" href="/Categories/Index.cshtml">Cancel</a>
+                </div>
+            </form>
+        </div>
     </main>
 </body>

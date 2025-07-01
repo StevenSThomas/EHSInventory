@@ -82,17 +82,21 @@ main{
     color: var(--text-clr);
     text-decoration: none;
     padding: 5px;
-    background-color: #6ae6ff;
+    background-color: var(--hover-clr);
     border-style: solid;
     border-color: var(--line-clr);
     border-radius: 5px;
     border-width: 2px;
     display: inline-flex;
     align-items: center;
+    transition: 150ms ease;
     img{
       width: 1em;
       padding-right: 0.2em;
     }
+}
+.addProduct:hover{
+    background-color: var(--accent-clr);
 }
 .table{
     text-align: left;
@@ -105,7 +109,6 @@ main{
 .table th,td{
     padding-top: 8px;
     padding-bottom: 8px;
-    width:20%;
 }
 .itemFunctions a{
     text-decoration: none;

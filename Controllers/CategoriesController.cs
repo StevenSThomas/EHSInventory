@@ -154,7 +154,10 @@ public class CategoriesController : Controller
         }
         ViewData["Category Name"] = category.Name;
 
-        return View();
+        return View(new EditProductView
+        {
+            CategoryId = id
+        });
     }
 
     [HttpPost, ActionName("Add")]
