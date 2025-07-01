@@ -10,10 +10,5 @@ namespace EHSInventory.Models
         public ProductCategory? CurrentCategory { get; set; }
 
         public List<Product> Products { get; set; } = new List<Product>();
-
-        public string ProductExpirationDate(Product product)
-        {
-            return product.ExpirationDate?.ToString("MM/dd/yyyy") ?? String.Empty;
-        }
     }
 }
