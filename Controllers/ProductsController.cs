@@ -18,7 +18,7 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Index(long id) // edit
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
         if (product == null)
         {
             return NotFound();
@@ -32,7 +32,8 @@ public class ProductsController : Controller
             GrangerNum = product.GrangerNum,
             Description = product.Description,
             Photo = product.Photo,
-            ExpirationDate = product.ExpirationDate?.ToString("MM/dd/yyyy") ?? String.Empty
+            ExpirationDate = product.ExpirationDate?.ToString("MM/dd/yyyy") ?? String.Empty,
+            CategoryId = product.Category.ProductCategoryId
         };
 
         return View(editProductView);
@@ -50,8 +51,12 @@ public class ProductsController : Controller
         if (ModelState.IsValid)
         {
             await _catalogService.UpdateProduct("placeholder", product, comment);
-            return Redirect("/Categories");
+            return Redirect($"/Categories/{product.CategoryId}");
         }
+
+        var _product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
+        product.CategoryId = _product.Category.ProductCategoryId;
+
         return View(product);
     }
 
@@ -69,13 +74,18 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Delete(long id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
         if (product == null)
         {
             return NotFound();
         }
 
-        return View(new DeleteConfirmationView {Name = product.Name, Comment = null });
+        return View(new DeleteConfirmationView
+        {
+            Name = product.Name,
+            Comment = null,
+            CategoryId = product.Category.ProductCategoryId
+        });
     }
 
     [HttpPost, ActionName("Delete")]
@@ -91,7 +101,7 @@ public class ProductsController : Controller
 
         if (deleteConfirmationView.Comment == null)
         {
-            return View(new DeleteConfirmationView { Name = product.Name, Comment = null });
+            return View(new DeleteConfirmationView { Name = product.Name, Comment = null, CategoryId = categoryId});
         }
 
         await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);

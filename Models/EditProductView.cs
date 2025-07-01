@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace EHSInventory.Models;
 
@@ -30,6 +31,9 @@ public class EditProductView : IValidatableObject
     [Required(ErrorMessage = "A comment explaining this change is required.")]
     public string? Comment { get; set; }
 
+    [BindNever]
+    public long? CategoryId { get; set; }    
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         // validate ExpirationDate
@@ -50,7 +54,7 @@ public class EditProductView : IValidatableObject
         }
 
         // check for duplicate name, unit, and expiration date
-            var context = (InventoryDbContext?)validationContext.GetService(typeof(InventoryDbContext));
+        var context = (InventoryDbContext?)validationContext.GetService(typeof(InventoryDbContext));
 
         var duplicates = context?.Products.Where(prod =>
         prod.ProductId != ProductId
