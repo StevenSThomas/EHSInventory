@@ -42,12 +42,22 @@ form{
 .field{
     padding: 0 0 0 0;
 }
-.field input, .field select{
+.field input{
     font: inherit;
     box-sizing: border-box;
     border-radius: 5px;
     border: solid 1px var(--line-clr);
     width: 50rem;
+    max-width: 50rem;
+    height: 2rem;
+    padding: 4px 8px;
+}
+.quantity input, .unit select{
+    font: inherit;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: solid 1px var(--line-clr);
+    width: fit-content;
     height: 2rem;
     padding: 4px 8px;
 }
