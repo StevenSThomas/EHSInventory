@@ -10,6 +10,8 @@ public class EditProductView : IValidatableObject
     [StringLength(255)]
     public string? Name { get; set; }
 
+    public int Quantity { get; set; }
+
     public ProductUnit Unit { get; set; } = ProductUnit.Individual;
 
     [StringLength(50)]

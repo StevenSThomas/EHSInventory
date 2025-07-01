@@ -27,6 +27,7 @@ public class ProductsController : Controller
         {
             ProductId = product.ProductId,
             Name = product.Name,
+            Quantity = product.Quantity,
             Unit = product.Unit,
             GrangerNum = product.GrangerNum,
             Description = product.Description,
