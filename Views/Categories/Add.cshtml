@@ -15,12 +15,12 @@
                 <input asp-for="Name"/><br/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="field">
+            <div class="quantity">
                 <label asp-for="Quantity">Quantity</label><br/>
                 <input asp-for="Quantity"/><br/>
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
-            <div class="field">
+            <div class="unit">
                 <label asp-for="Unit">Unit</label><br/>
                 <select asp-for="Unit" asp-items="Html.GetEnumSelectList<ProductUnit>()"></select>
             </div>
