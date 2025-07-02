@@ -5,7 +5,7 @@
 <body>
     <header>
         <h1>
-            <a href="/Categories/@Model.CategoryId">@Model.CategoryId</a> > @Model.Name</h1>
+            <a href="/Categories/@Model.CategoryId">@Model.CategoryName</a> > @Model.Name</h1>
     </header>
     <main>
         <div class="wrapper">
@@ -61,8 +61,7 @@
                 <tr>
                     <th>Modified On</th>
                     <th>Modified By</th>
-                    <!--<th>Change Type</th>-->
-                    <th>Change JSON</th>
+                    <th class="details-col">Modification Details</th>
                     <th>Comment</th>
                 </tr>
             </thead>
@@ -75,11 +74,32 @@
                     <td>
                         @Html.DisplayFor(modelItem => change.CreatedBy)
                     </td>
-                    <!--<td>
-                        @Html.DisplayFor(modelItem => change.ChangeType)
-                    </td>-->
-                    <td>
-                        @Html.DisplayFor(modelItem => change.ChangeJson)
+                    <td class="details-col">
+                        <table class="json-table">
+                            <thead>
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Before</th>
+                                    <th>After</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var change_ in change.Changes)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(c => change_.FieldChanged)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(c => change_.Before)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(c => change_.After)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => change.Comment)

@@ -17,5 +17,6 @@ public interface ICatalogService
     Task<bool> SetProductDisplayOrder(string userName, long id, int newDisplayOrder);
     Task<bool> ReorderProductAsync(long id, int newPosition);
     Task<long?> GetCategoryId(long id);
+    Task<List<ProductHistory>> GetProductHistories(long productId);
     Task<bool> FixOrderAsync(long id);
 }

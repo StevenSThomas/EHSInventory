@@ -161,3 +161,21 @@ h2{
 .history-table th, td{
     padding: 0.5em 0.25em;
 }
+.json-table{
+    text-align: left;
+    width: 300px;
+    table-layout: fixed;
+    column-width: 100px;
+    font-size: 0.8em;
+    padding: 0.5em 0.25em;
+}
+.json-table tr{
+    border-bottom: 1px solid var(--line-clr);
+}
+.json-table th, td{
+    padding: 0;
+}
+.history-table .details-col{
+    display: flex;
+    justify-content: center;
+}
