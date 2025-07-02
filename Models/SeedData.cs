@@ -13,7 +13,7 @@ namespace EHSInventory.Models
     {
         public static void EnsurePopulated(IApplicationBuilder app)
         {
-            
+
             InventoryDbContext context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
             if (context.Database.GetPendingMigrations().Any())
             {
@@ -89,18 +89,19 @@ namespace EHSInventory.Models
                 context.SaveChanges();
             }
 
-            if (!context.Products.Any())
+            if (context.Products.Any())
             {
-                var scope = app.ApplicationServices.CreateScope();
-                var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
-                var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger("SeedData");
-                importerExporter.ImportProducts("products.csv", "seeddata");
-                context.Dispose();
-                context = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<InventoryDbContext>();
-                logger.LogInformation("Product count before export: {Count}", context.Products.Count());
-                importerExporter.ExportProducts(context, "export.csv");
-
+                context.Products.RemoveRange(context.Products);
+                context.SaveChanges();
+            }
+            {
+                //var scope = app.ApplicationServices.CreateScope();
+                //var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
+                //var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger("SeedData");
+                //importerExporter.ImportProducts("products.csv", "seeddata");
+                //logger.LogInformation("Product count before export: {Count}", context.Products.Count());
+                //importerExporter.ExportProducts(context, "export.csv");
             }
         }
     }
-    }
+}
