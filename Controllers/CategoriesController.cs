@@ -20,7 +20,7 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> Index(long? id)
     {
-        if (id == null)
+        if (id == null || id < 1)
         {
             id = 1;
         }

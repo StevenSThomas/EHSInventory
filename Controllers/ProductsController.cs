@@ -86,14 +86,34 @@ public class ProductsController : Controller
         return View(product);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SetQuantity(long id, int newQuantity, string comment)
+    public async Task<IActionResult> SetQuantity(long id)
     {
-        bool success = await _catalogService.SetProductQuantity("placeholder", id, newQuantity, comment);
+        var product = await _context.Products.FindAsync(id);
+
+        if (product == null) return NotFound();
+
+        SetQuantityView view = new SetQuantityView
+        {
+            ProductId = id,
+            ProductName = product.Name
+        };
+
+        return View(view);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetQuantity(long id, SetQuantityView view)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(view);
+        }
+
+        bool success = await _catalogService.SetProductQuantity("placeholder", id, view.NewQuantity, view.Comment);
         if (success)
         {
-            var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
-            return Redirect($"/Categories/{product?.Category?.ProductCategoryId}");
+            return Redirect($"/Products/{view.ProductId}");
         }
         return NotFound();
     }
