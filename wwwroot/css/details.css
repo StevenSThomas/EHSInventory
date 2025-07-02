@@ -91,34 +91,19 @@ h1{
     padding: 0 0 0 0;
 }
 .field label, .quantity label, .unit label{
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 .field .value{
     font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
     width: 100%;
     height: 2rem;
-    padding: 4px 8px;
-}
-.quantity input, .unit select{
-    font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
-    width: fit-content;
-    height: 2rem;
-    padding: 4px 8px;
+    border: none;
 }
 .quantity .value, .unit .value{
     font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
     width: fit-content;
     height: 2rem;
-    padding: 4px 8px;
+    border: none;
 }
 #comment{
     font: inherit;

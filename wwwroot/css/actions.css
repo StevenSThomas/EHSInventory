@@ -46,7 +46,7 @@ form{
     padding: 0 0 0 0;
 }
 .field label, .quantity label, .unit label{
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 .field input{
     font: inherit;
@@ -57,6 +57,10 @@ form{
     max-width: 50rem;
     height: 2rem;
     padding: 4px 8px;
+}
+.field input::placeholder{
+    color: var(--text-clr);
+    opacity: 0.5;
 }
 .field .value{
     font: inherit;

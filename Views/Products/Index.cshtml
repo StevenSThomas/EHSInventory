@@ -26,35 +26,35 @@
             <input type="hidden" asp-for="ProductId"/>
 
             <div class="field">
-                <label for="Name">Name</label><br/>
+                <label for="Name">Name:</label><br/>
                 <p class="value" id="Name">@Model.Name</p>
             </div>
             <div class="quantity">
-                <label for="Quantity">Quantity</label><br/>
+                <label for="Quantity">Quantity:</label><br/>
                 <p class="value" id="Quantity"/>@Model.Quantity</p>
             </div>
             <div class="unit">
-                <label for="Unit">Unit</label><br/>
+                <label for="Unit">Unit:</label><br/>
                 <p class="value" id="Unit"/>@Model.Unit</p>
             </div>
             <div class="field">
-                <label for="GrangerNum">Grainger Number</label><br/>
+                <label for="GrangerNum">Grainger Number:</label><br/>
                 <p class="value" id="GrangerNum"/>@Model.GrangerNum</p>
             </div>
             <div class="field">
-                <label for="Description">Description</label><br/>
+                <label for="Description">Description:</label><br/>
                 <p class="value" id="Description"/>@Model.Description</p>
             </div>
             <!--<div class="field">
-                <label for="Photo">Photo</label><br/>
+                <label for="Photo">Photo:</label><br/>
                 <input asp-for="Photo"/>
             </div>-->
             <div class="field">
-                <label for="ExpirationDate">Expiration Date</label><br/>
+                <label for="ExpirationDate">Expiration Date:</label><br/>
                 <p class="value" id="ExpirationDate"/>@Model.ExpirationDate</p>
             </div>
             <div class="buttons">
-                <a class="return" href="/Categories/@Model.CategoryId">Go Back</a>
+                <a class="return" href="/Categories/@Model.CategoryId">← Back</a>
             </div>
         </div>
     </main>
@@ -63,12 +63,10 @@
         <table class="history-table">
             <thead>
                 <tr>
-                    <th>History ID</th>
-                    <th>Created On</th>
-                    <th>Created By</th>
-                    <th>Product ID</th>
-                    <th>Change Type</th>
-                    <!--<th>Change JSON</th>-->
+                    <th>Modified On</th>
+                    <th>Modified By</th>
+                    <!--<th>Change Type</th>-->
+                    <th>Change JSON</th>
                     <th>Comment</th>
                 </tr>
             </thead>
@@ -76,23 +74,17 @@
                 @foreach(var change in Model.ProductHistories){
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => change.ProductHistoryId)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => change.CreatedDt)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => change.CreatedBy)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => change.ProductId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => change.ChangeType)
-                    </td>
                     <!--<td>
-                        @Html.DisplayFor(modelItem => change.ChangeJson)
+                        @Html.DisplayFor(modelItem => change.ChangeType)
                     </td>-->
+                    <td>
+                        @Html.DisplayFor(modelItem => change.ChangeJson)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => change.Comment)
                     </td>
