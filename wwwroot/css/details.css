@@ -23,7 +23,7 @@ body{
     color: var(--text-clr);
     padding: min(30px, 7%);
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto;
     grid-template-areas:
     "header header"
     "details history"
@@ -37,6 +37,7 @@ main{
 aside{
     grid-area: history;
     padding: 10px 10px 10px 30px;
+    font-size: 0.8em;
 }
 .wrapper{
     box-sizing: border-box;
@@ -65,6 +66,7 @@ aside{
     border-width: 2px;
     display: inline-flex;
     align-items: center;
+    text-wrap: nowrap;
     transition: 150ms ease;
     svg{
       width: 1rem;
@@ -77,6 +79,13 @@ aside{
 h1{
     padding: 10px;
     margin-bottom: 20px;
+    a{
+        color: var(--text-clr);
+        text-decoration: none;
+    }
+    a:hover{
+        text-decoration: underline;
+    }
 }
 .field{
     padding: 0 0 0 0;
@@ -158,12 +167,12 @@ h2{
 }
 .history-table{
     text-align: left;
-    width: 900px;
+    width: 800px;
     border-collapse: collapse;
 }
 .history-table tr{
     border-bottom: 1px solid var(--line-clr);
 }
 .history-table th, td{
-    padding: 8px 4px;
+    padding: 0.5em 0.25em;
 }
