@@ -33,11 +33,11 @@ public class ProductsController : Controller
             Description = product.Description,
             Photo = product.Photo,
             ExpirationDate = product.ExpirationDate,
-            CategoryId = product.Category.ProductCategoryId
+            CategoryId = product.Category.ProductCategoryId,
+            CategoryName = product.Category.Name
         };
 
-        var productHistories = await _context.ProductHistories.Where(h => h.ProductId == id).ToListAsync();
-        productView.ProductHistories = productHistories;
+        productView.ProductHistories = await _catalogService.GetProductHistories(id);
 
         return View(productView);
     }
@@ -127,11 +127,11 @@ public class ProductsController : Controller
 
         if (deleteConfirmationView.Comment == null)
         {
-            return View(new DeleteConfirmationView { Name = product.Name, Comment = null, CategoryId = categoryId});
+            return View(new DeleteConfirmationView { Name = product.Name, Comment = null, CategoryId = categoryId });
         }
 
         await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);
-        
+
         return Redirect($"/Categories/{categoryId}");
 
     }

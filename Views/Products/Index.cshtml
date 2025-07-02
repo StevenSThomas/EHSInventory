@@ -5,7 +5,7 @@
 <body>
     <header>
         <h1>
-            <a href="/Categories/@Model.CategoryId">@Model.CategoryId</a> > @Model.Name</h1>
+            <a href="/Categories/@Model.CategoryId">@Model.CategoryName</a> > @Model.Name</h1>
     </header>
     <main>
         <div class="wrapper">
@@ -51,7 +51,7 @@
             </div>-->
             <div class="field">
                 <label for="ExpirationDate">Expiration Date:</label><br/>
-                <p class="value" id="ExpirationDate"/>@Model.ExpirationDate</p>
+                <p class="value" id="ExpirationDate"/>@(Model.ExpirationDate?.ToString("MM/dd/yyyy"))</p>
             </div>
             <div class="buttons">
                 <a class="return" href="/Categories/@Model.CategoryId">← Back</a>
@@ -83,7 +83,29 @@
                         @Html.DisplayFor(modelItem => change.ChangeType)
                     </td>-->
                     <td>
-                        @Html.DisplayFor(modelItem => change.ChangeJson)
+                        <thead>
+                            <tr>
+                                <th>Field changed</th>
+                                <th>Before</th>
+                                <th>After</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var change_ in change.Changes)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(c => change_.FieldChanged)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(c => change_.Before)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(c => change_.After)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => change.Comment)
