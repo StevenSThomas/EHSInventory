@@ -51,6 +51,7 @@
                 <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea>
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
+            @Html.HiddenFor(x => x.CategoryId)
             <div class="buttons">
                 <input type="submit" value="Apply Changes" class="submit"/>
                 <a class="cancel" href="/Categories/@Model.CategoryId">Cancel</a>

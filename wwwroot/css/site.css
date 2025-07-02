@@ -78,10 +78,14 @@ main{
 #sidebar a:hover, #sidebar .dropdown-btn:hover{
     background-color: var(--hover-clr);
 }
+h1{
+    margin-bottom: 20px;
+}
 .addProduct{
     color: var(--text-clr);
     text-decoration: none;
     padding: 5px;
+    margin-bottom: 15px;
     background-color: var(--hover-clr);
     border-style: solid;
     border-color: var(--line-clr);
@@ -98,33 +102,26 @@ main{
 .addProduct:hover{
     background-color: var(--accent-clr);
 }
-.table{
+.products-table{
     text-align: left;
     width: 900px;
     border-collapse: collapse;
 }
-.table tr{
+.products-table tr{
     border-bottom: 1px solid var(--line-clr);
 }
-.table th,td{
+.products-table th, td{
     padding: 8px 4px;
 }
-.table a{
+.products-table a{
     color: var(--text-clr);
     text-decoration: none;
 }
-.table a:hover{
+.products-table a:hover{
     color: var(--text-clr);
     text-decoration: underline;
 }
-.table .quantity-col{
+.products-table .quantity-col{
     text-align: right;
     padding-right: 2rem;
-}
-.itemFunctions a{
-    text-decoration: none;
-    padding-right: 5px;
-    img{
-      width: 1em;
-    }
 }
