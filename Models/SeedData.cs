@@ -97,10 +97,7 @@ namespace EHSInventory.Models
             {
                 var scope = app.ApplicationServices.CreateScope();
                 var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();
-                var logger = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>().CreateLogger("SeedData");
                 importerExporter.ImportProducts("products.csv", "seeddata");
-                logger.LogInformation("Product count before export: {Count}", context.Products.Count());
-                importerExporter.ExportProducts(context, "export.csv");
             }
         }
     }
