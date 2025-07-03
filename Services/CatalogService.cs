@@ -130,7 +130,10 @@ public class CatalogService : ICatalogService
 
         public bool AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo)
     {
-        ProductCategory? category = _context.ProductCategories.FirstOrDefault(c => categoryName.Equals(c.Name));
+        ProductCategory? category = _context.ProductCategories
+        .AsEnumerable()
+        .FirstOrDefault(c => c.Name.Trim().Equals(categoryName.Trim(), StringComparison.OrdinalIgnoreCase));
+
 
         if (category == null)
         {

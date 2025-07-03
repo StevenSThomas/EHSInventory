@@ -59,10 +59,18 @@ public class ImporterExporter
                 string unitStr = row[4].Trim();
                 string expiryStr = row[5].Trim();
 
-                if (!int.TryParse(quantityStr, out int quantity))
+                int quantity = 0;
+                if (!string.IsNullOrWhiteSpace(quantityStr))
                 {
-                    _logger.LogWarning("Invalid quantity in row: {Line}", line);
-                    continue;
+                    if (!int.TryParse(quantityStr, out quantity))
+                    {
+                        _logger.LogWarning("Invalid quantity '{Quantity}' in row: {Line}. Defaulting to 0.", quantityStr, line);
+                        quantity = 0;
+                    }
+                }
+                else
+                {
+                    _logger.LogWarning("Missing quantity in row: {Line}. Defaulting to 0.", line);
                 }
 
                 ProductUnit unit = ProductUnit.Individual;
