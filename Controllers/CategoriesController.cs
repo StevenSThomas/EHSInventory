@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EHSInventory.Controllers;
 
-[Authorize(Roles = "Safety Officer")]
+[Authorize(Roles = "Safety Officer, Product Requester")]
 public class CategoriesController : Controller
 {
     private readonly InventoryDbContext _context;
     private readonly ICatalogService _catalogService;
+    private readonly ShoppingService _shoppingService;
 
-    public CategoriesController(InventoryDbContext context, ICatalogService catalogService)
+    public CategoriesController(InventoryDbContext context, ICatalogService catalogService, ShoppingService shoppingService)
     {
         _context = context;
         _catalogService = catalogService;
+        _shoppingService = shoppingService;
     }
 
     public async Task<IActionResult> Index(long? id)
@@ -25,7 +27,9 @@ public class CategoriesController : Controller
             id = 1;
         }
 
-        var products = await _catalogService.ListProducts(id);
+        List<Product> products;
+        if (User.IsInRole("Safety Officer")) products = await _catalogService.ListProducts(id);
+        else products = await _shoppingService.ListProducts(id);
 
         if (products != null)
         {

@@ -112,7 +112,7 @@ public class ProductsController : Controller
             return View(view);
         }
 
-        bool success = await _catalogService.SetProductQuantity("placeholder", id, view.NewQuantity, view.Comment);
+        bool success = await _catalogService.SetProductQuantity("placeholder", id, view.NewQuantity, view.Unit, view.Comment);
         if (success)
         {
             return Redirect($"/Products/{view.ProductId}");

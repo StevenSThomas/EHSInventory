@@ -10,6 +10,9 @@ public class SetQuantityView
     [Required]
     public int NewQuantity { get; set; }
 
+    [Required]
+    public ProductUnit Unit { get; set; }
+
     [Required(ErrorMessage = "A comment is required explaining this change.")]
     public string? Comment { get; set; }
 }
