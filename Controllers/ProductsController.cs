@@ -79,7 +79,7 @@ public class ProductsController : Controller
         if (ModelState.IsValid)
         {
             await _catalogService.UpdateProduct(User.Identity.Name, product, comment);
-            return Redirect($"/Categories/{product.CategoryId}");
+            return Redirect($"/Products/{product.ProductId}");
         }
 
         var _product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
