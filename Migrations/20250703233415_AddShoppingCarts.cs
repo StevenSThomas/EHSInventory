@@ -30,7 +30,8 @@ namespace EHSInventory.Migrations
                     ShoppingCartItemId = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ShoppingCartId = table.Column<long>(type: "INTEGER", nullable: true),
-                    ProductId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Unit = table.Column<int>(type: "INTEGER", nullable: false),
                     Count = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

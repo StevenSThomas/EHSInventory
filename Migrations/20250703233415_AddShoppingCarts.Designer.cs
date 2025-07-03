@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHSInventory.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20250701042758_AddShoppingCarts")]
+    [Migration("20250703233415_AddShoppingCarts")]
     partial class AddShoppingCarts
     {
         /// <inheritdoc />
@@ -174,10 +174,14 @@ namespace EHSInventory.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("ProductId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<long?>("ShoppingCartId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Unit")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ShoppingCartItemId");

@@ -78,7 +78,7 @@ public class ProductsController : Controller
 
         if (ModelState.IsValid)
         {
-            await _catalogService.UpdateProduct("placeholder", product, comment);
+            await _catalogService.UpdateProduct(User.Identity.Name, product, comment);
             return Redirect($"/Categories/{product.CategoryId}");
         }
 
@@ -112,7 +112,7 @@ public class ProductsController : Controller
             return View(view);
         }
 
-        bool success = await _catalogService.SetProductQuantity("placeholder", id, view.NewQuantity, view.Unit, view.Comment);
+        bool success = await _catalogService.SetProductQuantity(User.Identity.Name, id, view.NewQuantity, view.Unit, view.Comment);
         if (success)
         {
             return Redirect($"/Products/{view.ProductId}");
@@ -152,7 +152,7 @@ public class ProductsController : Controller
             return View(deleteConfirmationView);
         }
 
-        await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);
+        await _catalogService.DeleteProduct(User.Identity.Name, id, deleteConfirmationView.Comment);
 
         return Redirect($"/Categories/{deleteConfirmationView.CategoryId}");
 
@@ -161,7 +161,7 @@ public class ProductsController : Controller
     [HttpPost]
     public async Task<IActionResult> SetDisplayOrder(long id, int newPosition)
     {
-        var success = await _catalogService.SetProductDisplayOrder("placeholder", id, newPosition);
+        var success = await _catalogService.SetProductDisplayOrder(User.Identity.Name, id, newPosition);
 
         if (!success)
         {
