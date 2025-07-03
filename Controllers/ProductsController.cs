@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
 using EHSInventory.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EHSInventory.Controllers;
 
+[Authorize(Roles = "Safety Officer")]
 public class ProductsController : Controller
 {
     private readonly InventoryDbContext _context;
@@ -53,7 +55,7 @@ public class ProductsController : Controller
         {
             ProductId = id,
             Name = product.Name,
-            Quantity = product.Quantity,
+            // Quantity = product.Quantity,
             Unit = product.Unit,
             GrangerNum = product.GrangerNum,
             Description = product.Description,
@@ -130,7 +132,8 @@ public class ProductsController : Controller
         {
             Name = product.Name,
             Comment = null,
-            CategoryId = product.Category.ProductCategoryId
+            CategoryId = product.Category.ProductCategoryId,
+            ProductId = id
         });
     }
 
@@ -138,8 +141,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id, DeleteConfirmationView deleteConfirmationView)
     {
-        var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
-        var categoryId = product?.Category?.ProductCategoryId;
+        var product = await _context.Products.FindAsync(id);
         if (product == null)
         {
             return NotFound();
@@ -147,12 +149,12 @@ public class ProductsController : Controller
 
         if (deleteConfirmationView.Comment == null)
         {
-            return View(new DeleteConfirmationView { Name = product.Name, Comment = null, CategoryId = categoryId });
+            return View(deleteConfirmationView);
         }
 
         await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);
 
-        return Redirect($"/Categories/{categoryId}");
+        return Redirect($"/Categories/{deleteConfirmationView.CategoryId}");
 
     }
 
