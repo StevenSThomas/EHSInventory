@@ -171,10 +171,14 @@ namespace EHSInventory.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("ProductId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<long?>("ShoppingCartId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Unit")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ShoppingCartItemId");

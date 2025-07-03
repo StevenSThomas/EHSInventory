@@ -60,7 +60,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            await _catalogService.AddCategory("placeholder", category);
+            await _catalogService.AddCategory(User.Identity.Name, category);
             return Redirect($"/Categories/{category.ProductCategoryId}");
         }
 
@@ -101,7 +101,7 @@ public class CategoriesController : Controller
 
         if (ModelState.IsValid)
         {
-            await _catalogService.UpdateCategory("placeholder", editCategoryView, editCategoryView.Comment);
+            await _catalogService.UpdateCategory(User.Identity.Name, editCategoryView, editCategoryView.Comment);
             return RedirectToAction(nameof(Index));
         }
         return View(editCategoryView);
@@ -139,7 +139,7 @@ public class CategoriesController : Controller
             return View(new DeleteConfirmationView { Name = category?.Name, Comment = null });
         }
 
-        bool success = await _catalogService.DeleteCategory("placeholder", id, deleteConfirmationView.Comment);
+        bool success = await _catalogService.DeleteCategory(User.Identity.Name, id, deleteConfirmationView.Comment);
         if (success)
         {
             return RedirectToAction(nameof(Index), new { id = 1 });
@@ -171,7 +171,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            bool success = await _catalogService.AddProduct("placeholder", id, productView);
+            bool success = await _catalogService.AddProduct(User.Identity.Name, id, productView);
             if (success)
             {
                 return Redirect($"/Categories/{id}");
