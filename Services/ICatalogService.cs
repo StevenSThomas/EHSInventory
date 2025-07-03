@@ -13,9 +13,10 @@ public interface ICatalogService
     bool AddProduct(string userName, string categoryName, string name, ProductUnit unit, int quantity, string? grangerNum, DateTime? expirationDate, string? description, string? photo);
     Task<bool> UpdateProduct(string userName, EditProductView product, string comment);
     Task<bool> DeleteProduct(string userName, long id, string comment);
-    Task<bool> SetProductQuantity(string userName, long id, int newQuantity, string comment);
+    Task<bool> SetProductQuantity(string userName, long id, int newQuantity, ProductUnit newUnit, string comment);
     Task<bool> SetProductDisplayOrder(string userName, long id, int newDisplayOrder);
     Task<bool> ReorderProductAsync(long id, int newPosition);
     Task<long?> GetCategoryId(long id);
+    Task<List<ProductHistory>> GetProductHistories(long productId);
     Task<bool> FixOrderAsync(long id);
 }

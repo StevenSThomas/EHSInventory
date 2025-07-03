@@ -31,7 +31,7 @@ public class EditProductView : IValidatableObject
     [Required(ErrorMessage = "A comment explaining this change is required.")]
     public string? Comment { get; set; }
 
-    [BindNever]
+    //[BindNever]
     public long? CategoryId { get; set; }    
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -33,7 +33,7 @@ main{
 #sidebar{
     box-sizing: border-box;
     height: 100vh;
-    width: auto;
+    width: 301px;
     padding: 5px 1em;
     background-color: var(--base-clr);
     border-right: 1px solid var(--line-clr);
@@ -78,10 +78,14 @@ main{
 #sidebar a:hover, #sidebar .dropdown-btn:hover{
     background-color: var(--hover-clr);
 }
+h1{
+    margin-bottom: 20px;
+}
 .addProduct{
     color: var(--text-clr);
     text-decoration: none;
     padding: 5px;
+    margin-bottom: 15px;
     background-color: var(--hover-clr);
     border-style: solid;
     border-color: var(--line-clr);
@@ -90,30 +94,34 @@ main{
     display: inline-flex;
     align-items: center;
     transition: 150ms ease;
-    img{
-      width: 1em;
+    svg{
+      width: 1rem;
       padding-right: 0.2em;
     }
 }
 .addProduct:hover{
     background-color: var(--accent-clr);
 }
-.table{
+.products-table{
     text-align: left;
-    width: 100%;
+    width: 900px;
     border-collapse: collapse;
 }
-.table tr{
+.products-table tr{
     border-bottom: 1px solid var(--line-clr);
 }
-.table th,td{
-    padding-top: 8px;
-    padding-bottom: 8px;
+.products-table th, td{
+    padding: 0.5em 0.25em;
 }
-.itemFunctions a{
+.products-table a{
+    color: var(--text-clr);
     text-decoration: none;
-    padding-right: 5px;
-    img{
-      width: 1em;
-    }
+}
+.products-table a:hover{
+    color: var(--text-clr);
+    text-decoration: underline;
+}
+.products-table .quantity-col{
+    text-align: right;
+    padding-right: 2rem;
 }

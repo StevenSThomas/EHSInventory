@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace EHSInventory.Models;
 
 public class ProductHistory
@@ -16,5 +18,9 @@ public class ProductHistory
     public long? ProductId { get; set; }
     public changeType ChangeType { get; set; }
     public string ChangeJson { get; set; } = String.Empty;
+
+    [NotMapped]
+    public List<Change>? Changes { get; set; }
+
     public string Comment { get; set; } = String.Empty;
 }

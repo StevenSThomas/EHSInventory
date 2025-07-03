@@ -1,0 +1,39 @@
+@model EHSInventory.Models.SetQuantityView
+
+<head>
+    <link rel="stylesheet" href="~/css/actions.css">
+</head>
+<body>
+    <main>
+        <div class="wrapper">
+            <h1>Edit quantity for @Model.ProductName</h1>
+
+            <form asp-action="SetQuantity">
+                <input type="hidden" asp-for="ProductId" value="@Model.ProductId"/>
+                <input type="hidden" asp-for="ProductName" value="@Model.ProductName"/>
+
+                <div class="field">
+                    <label asp-for="NewQuantity">New Quantity</label><br/>
+                    <input asp-for="NewQuantity"/><br/>
+                    <span asp-validation-for="NewQuantity" class="text-danger"></span>
+                </div>
+
+                <div class="unit">
+                    <label asp-for="Unit">Unit</label><br/>
+                    <select asp-for="Unit" asp-items="Html.GetEnumSelectList<ProductUnit>()"></select>
+                </div>
+
+                <div class="field">
+                    <label asp-for="Comment">Comment</label><br/>
+                    <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea><br/>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+
+                <div class="buttons">
+                    <input type="submit" value="Apply Changes" class="submit"/>
+                    <a class="cancel" href="/Products/@Model.ProductId">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>

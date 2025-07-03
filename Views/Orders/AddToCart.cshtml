@@ -1,0 +1,22 @@
+@model EHSInventory.Models.AddToCartView
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+
+<h1>Add @Model.ProductName (@Model.Unit) to cart</h1>
+
+<form asp-action="AddToCartPost" class="form-group">
+    <input type="hidden" asp-for="ProductName" value="@Model.ProductName">
+    <input type="hidden" asp-for="Unit" value="@Model.Unit">
+
+    <div class="form-group">
+        <label asp-for="Count" class="control-label"></label>
+        <input asp-for="Count" class="form-control" />
+        <span asp-validation-for="Count" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Add to cart" class="btn btn-primary" />
+    </div>
+</form>

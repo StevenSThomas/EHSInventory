@@ -10,6 +10,7 @@ public class DeleteConfirmationView
     [Required(ErrorMessage = "A comment explaining this delete is required.")]
     public string? Comment { get; set; }
 
-    [BindNever]
     public long? CategoryId { get; set; }
+
+    public long? ProductId { get; set; }
 }
