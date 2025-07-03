@@ -46,13 +46,13 @@ aside{
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
 .option-bar{
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    margin-bottom: 20px;
 }
 .action{
     display: inline-block;
@@ -89,6 +89,7 @@ h1{
 }
 .field{
     padding: 0 0 0 0;
+    margin-bottom: 15px
 }
 .field label, .quantity label, .unit label{
     font-size: 0.8rem;
@@ -148,11 +149,12 @@ h1{
     color: var(--error-clr);
 }
 h2{
+    font-size: 1rem;
     margin-bottom: 15px;
 }
 .history-table{
     text-align: left;
-    width: 800px;
+    width: 900px;
     border-collapse: collapse;
 }
 .history-table tr{
@@ -160,6 +162,7 @@ h2{
 }
 .history-table th, td{
     padding: 0.5em 0.25em;
+    vertical-align: top;
 }
 .json-table{
     text-align: left;
@@ -168,14 +171,9 @@ h2{
     column-width: 100px;
     font-size: 0.8em;
     padding: 0.5em 0.25em;
-}
-.json-table tr{
-    border-bottom: 1px solid var(--line-clr);
+    text-wrap: nowrap;
 }
 .json-table th, td{
     padding: 0;
-}
-.history-table .details-col{
-    display: flex;
-    justify-content: center;
+    vertical-align: top;
 }
