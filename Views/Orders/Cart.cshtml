@@ -1,0 +1,23 @@
+@model EHSInventory.Models.CartView
+
+<h1>Shopping cart</h1>
+
+<table>
+    <thead>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Count</th>
+    </thead>
+    @foreach (var item in Model.Items)
+    {
+        <td>
+            @item.Name
+        </td>
+        <td>
+            @item.Unit
+        </td>
+        <td>
+            @item.Count
+        </td>
+    }
+</table>

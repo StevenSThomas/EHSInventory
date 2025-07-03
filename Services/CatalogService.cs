@@ -106,6 +106,7 @@ public class CatalogService : ICatalogService
         Product product = new Product
         {
             Name = productView.Name,
+            Quantity = productView.Quantity,
             Unit = productView.Unit,
             GrangerNum = productView.GrangerNum,
             Description = productView.Description,
@@ -180,7 +181,7 @@ public class CatalogService : ICatalogService
 
         originalProduct.Name = product.Name;
         // originalProduct.Quantity = product.Quantity;
-        originalProduct.Unit = product.Unit;
+        // originalProduct.Unit = product.Unit;
         originalProduct.GrangerNum = product.GrangerNum;
         originalProduct.Description = product.Description;
         originalProduct.Photo = product.Photo;
@@ -228,7 +229,7 @@ public class CatalogService : ICatalogService
         return true;
     }
 
-    public async Task<bool> SetProductQuantity(string userName, long id, int newQuantity, string comment)
+    public async Task<bool> SetProductQuantity(string userName, long id, int newQuantity, ProductUnit newUnit, string comment)
     {
         Product? product = await _context.Products.FindAsync(id);
 
@@ -237,8 +238,31 @@ public class CatalogService : ICatalogService
             return false;
         }
 
-        string changeJson = CompareProducts(ProductHistory.changeType.setQuantity, product.Quantity, newQuantity);
+        List<Change> changes = new List<Change>();
+
+        if (product.Quantity != newQuantity)
+        {
+            changes.Add(new Change
+            {
+                FieldChanged = "Quantity",
+                Before = product.Quantity.ToString(),
+                After = newQuantity.ToString()
+            });
+        }
+
+        if (product.Unit != newUnit)
+        {
+            changes.Add(new Change
+            {
+                FieldChanged = "Unit",
+                Before = product.Unit.ToString(),
+                After = newUnit.ToString()
+            });
+        }
+
+        string changeJson = JsonSerializer.Serialize(changes);
         product.Quantity = newQuantity;
+        product.Unit = newUnit;
         _context.Update(product);
 
         ProductHistory history = new ProductHistory

@@ -16,6 +16,11 @@
         <span asp-validation-for="NewQuantity" class="text-danger"></span>
     </div>
 
+    <div class="unit">
+        <label asp-for="Unit">Unit</label><br/>
+        <select asp-for="Unit" asp-items="Html.GetEnumSelectList<ProductUnit>()"></select>
+    </div>
+
     <div class="field"></div>
         <label asp-for="Comment">Comment</label><br/>
         <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea>
