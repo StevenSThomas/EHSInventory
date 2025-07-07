@@ -1,34 +1,40 @@
 @model EHSInventory.Models.Order
+<head>
+    <link rel="stylesheet" href="~/css/cart.css">
+</head>
+<body>
+    <main>
+        <h1>Order confirmed</h1>
 
-<h1>Order confirmed</h1>
+        <p>Order ID: @Model.OrderId</p>
+        <p>Created: @Model.CreatedDt</p>
+        <p>Status: @Model.Status</p>
+        <p>Requester: @Model.Requester</p>
+        <p>
+            Items:
+            <table id="order-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Unit</th>
+                        <th class="quantity-col">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in (List<ShoppingCartItem>)ViewData["items"]) {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Unit</td>
+                            <td class="quantity-col">@item.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </p>
 
-<p>Order ID: @Model.OrderId</p>
-<p>Created: @Model.CreatedDt</p>
-<p>Status: @Model.Status</p>
-<p>Requester: @Model.Requester</p>
-<p>
-    Items:
-    <table>
-        <th>Name</th>
-        <th>Unit</th>
-        <th>Count</th>
-        @foreach (var item in (List<ShoppingCartItem>)ViewData["items"]) {
-            <tr>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Unit
-                </td>
-                <td>
-                    @item.Count
-                </td>
-            </tr>
-        }
-    </table>
-</p>
-
-<p>
-    <a href="/Categories">Return to products page</a>
-    <a href="/Orders">View all orders</a>
-</p>
+        <div class="buttons">
+            <a class="confirm-action" href="/Categories">Return to Products</a>
+            <a class="confirm-action" href="/Orders">View all orders</a>
+        </div>
+    </main>
+</body>
