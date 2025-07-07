@@ -52,32 +52,31 @@ form{
 }
 .field{
     padding: 0 0 0 0;
+    input{
+        font: inherit;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: solid 1px var(--line-clr);
+        width: 50rem;
+        height: 2rem;
+        padding: 4px 8px;
+    }
+    input::placeholder{
+        color: var(--text-clr);
+        opacity: 0.5;
+    }
+    .value{
+        font: inherit;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: solid 1px var(--line-clr);
+        width: 50rem;
+        height: 2rem;
+        padding: 4px 8px;
+    }
 }
 .field label, .quantity label, .unit label{
     font-size: 0.8rem;
-}
-.field input{
-    font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
-    width: 50rem;
-    max-width: 50rem;
-    height: 2rem;
-    padding: 4px 8px;
-}
-.field input::placeholder{
-    color: var(--text-clr);
-    opacity: 0.5;
-}
-.field .value{
-    font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
-    width: 50rem;
-    height: 2rem;
-    padding: 4px 8px;
 }
 .quantity input, .unit select{
     font: inherit;
