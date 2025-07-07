@@ -89,11 +89,7 @@ namespace EHSInventory.Models
                 context.SaveChanges();
             }
 
-            if (context.Products.Any())
-            {
-                context.Products.RemoveRange(context.Products);
-                context.SaveChanges();
-            }
+            if (!context.Products.Any())
             {
                 var scope = app.ApplicationServices.CreateScope();
                 var importerExporter = scope.ServiceProvider.GetRequiredService<ImporterExporter>();

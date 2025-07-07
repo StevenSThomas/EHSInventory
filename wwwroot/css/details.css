@@ -160,7 +160,7 @@ h2{
 .history-table tr{
     border-bottom: 1px solid var(--line-clr);
 }
-.history-table th, td{
+.history-table th, .history-table td{
     padding: 0.5em 0.25em;
     vertical-align: top;
 }
@@ -170,10 +170,10 @@ h2{
     table-layout: fixed;
     column-width: 100px;
     font-size: 0.8em;
-    padding: 0.5em 0.25em;
+    padding: 0;
     text-wrap: nowrap;
 }
-.json-table th, td{
+.json-table th, .json-table td{
     padding: 0;
     vertical-align: top;
 }
