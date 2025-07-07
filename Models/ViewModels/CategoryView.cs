@@ -10,5 +10,7 @@ namespace EHSInventory.Models
         public ProductCategory? CurrentCategory { get; set; }
 
         public List<Product> Products { get; set; } = new List<Product>();
+
+        public int ItemCount { get; set; }
     }
 }

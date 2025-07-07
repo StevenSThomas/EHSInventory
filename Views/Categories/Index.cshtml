@@ -30,6 +30,7 @@
         </ul>
     </nav>
     <main>
+        @if (User.IsInRole("Product Requester")) { <a href="/Cart">Cart - @Model.ItemCount items</a> }
         <h1>@Model.CurrentCategory.Name</h1>
         @if (User.IsInRole("Safety Officer")) {
             <a class="addProduct" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
@@ -41,11 +42,10 @@
             <thead>
                 <tr>
                     @if (User.IsInRole("Safety Officer")) { <th>Item (Click to view details)</th> }
-                    else { <th>Item</th> }
+                    else { <th>Item (click to view and order)</th> }
                     @if (User.IsInRole("Safety Officer")) { <th class="quantity-col">Quantity</th> }
                     <th>Unit</th>
                     @if (User.IsInRole("Safety Officer")) { <th>Expiration Date</th> }
-                    @if (User.IsInRole("Product Requester")) { <th>Add to cart</th> }
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,15 @@
                                 @Html.DisplayFor(modelItem => product.Name)
                             </a>
                         }
-                        else @Html.DisplayFor(modelItem => product.Name)
+                        else
+                        {
+                            @Html.ActionLink(product.Name, "AddToCart", "Orders", new AddToCartView
+                            {
+                                CategoryId = Model.CurrentCategory.ProductCategoryId,
+                                ProductName = product.Name,
+                                Unit = product.Unit
+                            })
+                        }
                     </td>
                     @if (User.IsInRole("Safety Officer"))
                     {
@@ -73,16 +81,6 @@
                     {
                         <td>
                             @(product.ExpirationDate?.ToString("MM/dd/yyyy"))
-                        </td>
-                    }
-                    @if (User.IsInRole("Product Requester"))
-                    {
-                        <td>
-                            <a asp-controller="OrdersController" asp-action="AddToCart"
-                            asp-route-ProductName="@product.Name" 
-                            asp-route-Unit="@product.Unit">
-                                Add to cart
-                            </a>
                         </td>
                     }
                 </tr>
