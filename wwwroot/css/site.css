@@ -10,6 +10,8 @@
     --hover-clr: #6ae6ff86;
     --text-clr: #000000;
     --accent-clr: #6ae6ff;
+    --error-clr: #ff3030;
+    --error-hvr: #ff303086;
 }
 *{
     margin: 0;
@@ -17,6 +19,7 @@
 }
 html{
     font-family: Poppins;
+    color: var(--text-clr);
     line-height: 1.5rem;
 }
 body{
@@ -37,6 +40,27 @@ header{
 main{
     grid-area: table;
     padding: 0 30px 30px 30px;
+}
+#top-bar{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    gap: 700px;
+    margin-bottom: 20px;
+}
+#logout{
+    text-decoration: none;
+    color: var(--text-clr);
+    padding: 5px;
+    background-color: var(--error-hvr);
+    border-style: solid;
+    border-color: var(--line-clr);
+    border-radius: 5px;
+    border-width: 2px;
+    transition: 150ms ease;
+}
+#logout:hover{
+    background-color: var(--error-clr);
 }
 #sidebar{
     grid-area: navbar;
@@ -87,9 +111,6 @@ main{
 #sidebar a:hover, #sidebar .dropdown-btn:hover{
     background-color: var(--hover-clr);
 }
-h1{
-    margin-bottom: 20px;
-}
 .addProduct{
     color: var(--text-clr);
     text-decoration: none;
@@ -110,26 +131,26 @@ h1{
 .addProduct:hover{
     background-color: var(--accent-clr);
 }
-.products-table{
+#products-table{
     text-align: left;
     width: 900px;
     border-collapse: collapse;
 }
-.products-table tr{
+#products-table tr{
     border-bottom: 1px solid var(--line-clr);
 }
-.products-table th, td{
+#products-table th, td{
     padding: 0.5em 0.25em;
 }
-.products-table a{
+#products-table a{
     color: var(--text-clr);
     text-decoration: none;
 }
-.products-table a:hover{
+#products-table a:hover{
     color: var(--text-clr);
     text-decoration: underline;
 }
-.products-table .quantity-col{
+#products-table .quantity-col{
     text-align: right;
     padding-right: 2rem;
 }
