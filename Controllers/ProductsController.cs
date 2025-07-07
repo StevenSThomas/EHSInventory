@@ -82,9 +82,6 @@ public class ProductsController : Controller
             return Redirect($"/Products/{product.ProductId}");
         }
 
-        var _product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
-        product.CategoryId = _product.Category.ProductCategoryId;
-
         return View(product);
     }
 

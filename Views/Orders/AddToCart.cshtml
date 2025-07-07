@@ -4,19 +4,35 @@
     <link rel="stylesheet" href="~/css/site.css">
 </head>
 
+@if (Model.Count == 0) {
 <h1>Add @Model.ProductName (@Model.Unit) to cart</h1>
+}
+else {
+    <h1>Edit @Model.ProductName (@Model.Unit) quantity in cart</h1>
+}
 
 <form asp-action="AddToCartPost" class="form-group">
     <input type="hidden" asp-for="ProductName" value="@Model.ProductName">
     <input type="hidden" asp-for="Unit" value="@Model.Unit">
+    <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
 
     <div class="form-group">
         <label asp-for="Count" class="control-label"></label>
-        <input asp-for="Count" class="form-control" />
+        <input asp-for="Count" class="form-control" value="@Model.Count" />
         <span asp-validation-for="Count" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <input type="submit" value="Add to cart" class="btn btn-primary" />
+        @{
+            string button;
+            if (Model.Count == 0) {
+            button = "Add to cart";
+            }
+            
+            else {
+                button = "Edit";
+            }
+        }
+        <input type="submit" value="@button" class="btn btn-primary" />
     </div>
 </form>

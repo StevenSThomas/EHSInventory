@@ -13,7 +13,7 @@ public class ProductHistory
     }
 
     public long? ProductHistoryId { get; set; }
-    public DateTime CreatedDt { get; set; }
+    public DateTime CreatedDt { get; set; } = DateTime.Now;
     public string CreatedBy { get; set; } = String.Empty;
     public long? ProductId { get; set; }
     public changeType ChangeType { get; set; }
