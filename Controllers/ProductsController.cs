@@ -61,7 +61,8 @@ public class ProductsController : Controller
             Description = product.Description,
             Photo = product.Photo,
             ExpirationDate = product.ExpirationDate?.ToString("MM/dd/yyyy") ?? String.Empty,
-            CategoryId = product.Category.ProductCategoryId
+            CategoryId = product.Category.ProductCategoryId,
+            CategoryName = product.Category.Name
         };
 
         return View(editProductView);
@@ -87,7 +88,7 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> SetQuantity(long id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
 
         if (product == null) return NotFound();
 
@@ -96,6 +97,8 @@ public class ProductsController : Controller
             ProductId = id,
             ProductName = product.Name,
             NewQuantity = product.Quantity,
+            CategoryId = product.Category.ProductCategoryId,
+            CategoryName = product.Category.Name,
             Unit = product.Unit
         };
 
@@ -132,6 +135,7 @@ public class ProductsController : Controller
             Name = product.Name,
             Comment = null,
             CategoryId = product.Category.ProductCategoryId,
+            CategoryName = product.Category.Name,
             ProductId = id
         });
     }
