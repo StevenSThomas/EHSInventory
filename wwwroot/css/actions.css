@@ -36,6 +36,13 @@ main{
 }
 h1{
     margin-bottom: 20px;
+    a{
+        text-decoration: none;
+        color: var(--text-clr);
+    }
+    a:hover{
+        text-decoration: underline;
+    }
 }
 form{
     display: flex;

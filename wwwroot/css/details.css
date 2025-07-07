@@ -52,6 +52,7 @@ aside{
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    padding: 10px;
     margin-bottom: 20px;
 }
 .action{
@@ -78,7 +79,6 @@ aside{
 }
 h1{
     padding: 10px;
-    margin-bottom: 20px;
     a{
         color: var(--text-clr);
         text-decoration: none;

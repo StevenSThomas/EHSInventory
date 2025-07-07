@@ -6,11 +6,12 @@
 <body>
     <main>
         <div class="wrapper">
-            <h1>Delete @Model.Name?</h1>
+            <h1><a href="/Categories/@Model.CategoryId">@Model.CategoryName</a> > <a href="/Products/@Model.ProductId">@Model.Name</a> > Delete</h1>
             <p>Are you sure you want to delete product @Model.Name?</p>
             <form asp-action="Delete">
                 <input type="hidden" asp-for="ProductId" value="@Model.ProductId">
                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId">
+                <input type="hidden" asp-for="CategoryName" value="@Model.CategoryName">
                 <input type="hidden" asp-for="Name" value="@Model.Name">
 
                 <div class="field">

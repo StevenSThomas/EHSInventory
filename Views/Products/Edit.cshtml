@@ -6,12 +6,12 @@
 <body>
     <main>
         <div class="wrapper">
-            <h1>Edit @Model.Name</h1>
-
+            <h1><a href="/Categories/@Model.CategoryId">@Model.CategoryName</a> > <a href="/Products/@Model.ProductId">@Model.Name</a> > Edit</h1>
             <form asp-action="Edit">
 
             <input type="hidden" asp-for="ProductId"/>
             <input type="hidden" asp-for="CategoryId"/>
+            <input type="hidden" asp-for="CategoryName">
 
             <div class="field">
                 <label asp-for="Name">Name</label><br/>

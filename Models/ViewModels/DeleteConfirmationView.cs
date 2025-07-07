@@ -12,5 +12,7 @@ public class DeleteConfirmationView
 
     public long? CategoryId { get; set; }
 
+    public string CategoryName { get; set; } = String.Empty;  
+
     public long? ProductId { get; set; }
 }

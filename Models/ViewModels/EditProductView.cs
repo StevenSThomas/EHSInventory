@@ -32,7 +32,9 @@ public class EditProductView : IValidatableObject
     public string? Comment { get; set; }
 
     //[BindNever]
-    public long? CategoryId { get; set; }    
+    public long? CategoryId { get; set; }
+
+    public string CategoryName { get; set; } = String.Empty;  
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
