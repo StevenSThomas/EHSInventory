@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using EHSInventory.Models;
 using EHSInventory.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EHSInventory.Controllers;
 
+[Authorize(Roles = "Safety Officer")]
 public class ProductsController : Controller
 {
     private readonly InventoryDbContext _context;
@@ -16,7 +18,33 @@ public class ProductsController : Controller
         _catalogService = catalogService;
     }
 
-    public async Task<IActionResult> Index(long id) // edit
+    public async Task<IActionResult> Index(long id)
+    {
+        var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        var productView = new ProductView
+        {
+            ProductId = id,
+            Name = product.Name,
+            Quantity = product.Quantity,
+            Unit = product.Unit,
+            GrangerNum = product.GrangerNum,
+            Description = product.Description,
+            Photo = product.Photo,
+            ExpirationDate = product.ExpirationDate,
+            CategoryId = product.Category.ProductCategoryId,
+            CategoryName = product.Category.Name
+        };
+
+        productView.ProductHistories = await _catalogService.GetProductHistories(id);
+
+        return View(productView);
+    }
+
+    public async Task<IActionResult> Edit(long id) // edit
     {
         var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
         if (product == null)
@@ -27,7 +55,7 @@ public class ProductsController : Controller
         {
             ProductId = id,
             Name = product.Name,
-            Quantity = product.Quantity,
+            // Quantity = product.Quantity,
             Unit = product.Unit,
             GrangerNum = product.GrangerNum,
             Description = product.Description,
@@ -41,7 +69,7 @@ public class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Index(long id, EditProductView product, string comment)
+    public async Task<IActionResult> Edit(long id, EditProductView product, string comment)
     {
         if (product.ProductId != id)
         {
@@ -50,8 +78,8 @@ public class ProductsController : Controller
 
         if (ModelState.IsValid)
         {
-            await _catalogService.UpdateProduct("placeholder", product, comment);
-            return Redirect($"/Categories/{product.CategoryId}");
+            await _catalogService.UpdateProduct(User.Identity.Name, product, comment);
+            return Redirect($"/Products/{product.ProductId}");
         }
 
         var _product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
@@ -60,14 +88,34 @@ public class ProductsController : Controller
         return View(product);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SetQuantity(long id, int newQuantity, string comment)
+    public async Task<IActionResult> SetQuantity(long id)
     {
-        bool success = await _catalogService.SetProductQuantity("placeholder", id, newQuantity, comment);
+        var product = await _context.Products.FindAsync(id);
+
+        if (product == null) return NotFound();
+
+        SetQuantityView view = new SetQuantityView
+        {
+            ProductId = id,
+            ProductName = product.Name
+        };
+
+        return View(view);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetQuantity(long id, SetQuantityView view)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(view);
+        }
+
+        bool success = await _catalogService.SetProductQuantity(User.Identity.Name, id, view.NewQuantity, view.Unit, view.Comment);
         if (success)
         {
-            var product = await _context.Products.Include(p => p.Category).FirstAsync(p => p.ProductId == id);
-            return Redirect($"/Categories/{product?.Category?.ProductCategoryId}");
+            return Redirect($"/Products/{view.ProductId}");
         }
         return NotFound();
     }
@@ -84,7 +132,8 @@ public class ProductsController : Controller
         {
             Name = product.Name,
             Comment = null,
-            CategoryId = product.Category.ProductCategoryId
+            CategoryId = product.Category.ProductCategoryId,
+            ProductId = id
         });
     }
 
@@ -92,8 +141,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(long id, DeleteConfirmationView deleteConfirmationView)
     {
-        var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
-        var categoryId = product?.Category?.ProductCategoryId;
+        var product = await _context.Products.FindAsync(id);
         if (product == null)
         {
             return NotFound();
@@ -101,19 +149,19 @@ public class ProductsController : Controller
 
         if (deleteConfirmationView.Comment == null)
         {
-            return View(new DeleteConfirmationView { Name = product.Name, Comment = null, CategoryId = categoryId});
+            return View(deleteConfirmationView);
         }
 
-        await _catalogService.DeleteProduct("placeholder", id, deleteConfirmationView.Comment);
-        
-        return Redirect($"/Categories/{categoryId}");
+        await _catalogService.DeleteProduct(User.Identity.Name, id, deleteConfirmationView.Comment);
+
+        return Redirect($"/Categories/{deleteConfirmationView.CategoryId}");
 
     }
 
     [HttpPost]
     public async Task<IActionResult> SetDisplayOrder(long id, int newPosition)
     {
-        var success = await _catalogService.SetProductDisplayOrder("placeholder", id, newPosition);
+        var success = await _catalogService.SetProductDisplayOrder(User.Identity.Name, id, newPosition);
 
         if (!success)
         {

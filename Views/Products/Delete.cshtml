@@ -9,13 +9,18 @@
             <h1>Delete @Model.Name?</h1>
             <p>Are you sure you want to delete product @Model.Name?</p>
             <form asp-action="Delete">
+                <input type="hidden" asp-for="ProductId" value="@Model.ProductId">
+                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId">
+                <input type="hidden" asp-for="Name" value="@Model.Name">
+
                 <div class="field">
-                    <label for="comment">Comment</label><br/>
-                    <textarea name="comment" id="comment" placeholder="Comment"></textarea>
+                    <label asp-for="Comment">Comment</label><br/>
+                    <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea><br/>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
                 </div>
                 <div class="buttons">
                     <input type="submit" value="Delete" class="submit">
-                    <a class="cancel" href="/Categories/Index.cshtml">Cancel</a>
+                    <a class="cancel" href="/Products/@Model.ProductId">Cancel</a>
                 </div>
             </form>
         </div>
