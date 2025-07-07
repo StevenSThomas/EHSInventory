@@ -28,11 +28,6 @@
                 <input asp-for="Description"/><br/>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <!--<div class="field">
-                <label asp-for="Photo">Photo</label><br/>
-                <input asp-for="Photo"/><br/>
-                <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>-->
             <div class="field">
                 <label asp-for="ExpirationDate">Expiration Date</label><br/>
                 <input asp-for="ExpirationDate" placeholder="MM/DD/YYYY"/><br/>
@@ -40,15 +35,14 @@
             </div>
             <div class="field">
                 <label asp-for="Comment">Comment</label><br/>
-                <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea>
+                <textarea name="comment" id="comment" placeholder="Comment" asp-for="Comment"></textarea><br/>
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             @Html.HiddenFor(x => x.CategoryId)
             <div class="buttons">
                 <input type="submit" value="Apply Changes" class="submit"/>
                 <a class="cancel" href="/Product/@Model.ProductId">Cancel</a>
-            </div>
-
+              </div>
             </form>
         </div>
     </main>
