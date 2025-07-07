@@ -11,6 +11,7 @@
             <form asp-action="Edit">
 
             <input type="hidden" asp-for="ProductId"/>
+            <input type="hidden" asp-for="CategoryId"/>
 
             <div class="field">
                 <label asp-for="Name">Name</label><br/>
@@ -45,7 +46,7 @@
             @Html.HiddenFor(x => x.CategoryId)
             <div class="buttons">
                 <input type="submit" value="Apply Changes" class="submit"/>
-                <a class="cancel" href="/Categories/@Model.CategoryId">Cancel</a>
+                <a class="cancel" href="/Product/@Model.ProductId">Cancel</a>
             </div>
 
             </form>

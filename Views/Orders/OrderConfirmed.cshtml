@@ -1,0 +1,34 @@
+@model EHSInventory.Models.Order
+
+<h1>Order confirmed</h1>
+
+<p>Order ID: @Model.OrderId</p>
+<p>Created: @Model.CreatedDt</p>
+<p>Status: @Model.Status</p>
+<p>Requester: @Model.Requester</p>
+<p>
+    Items:
+    <table>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Count</th>
+        @foreach (var item in (List<ShoppingCartItem>)ViewData["items"]) {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Unit
+                </td>
+                <td>
+                    @item.Count
+                </td>
+            </tr>
+        }
+    </table>
+</p>
+
+<p>
+    <a href="/Categories">Return to products page</a>
+    <a href="/Orders">View all orders</a>
+</p>

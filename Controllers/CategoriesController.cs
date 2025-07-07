@@ -38,7 +38,8 @@ public class CategoriesController : Controller
             {
                 AllCategories = await _catalogService.ListCategories(),
                 CurrentCategory = await _context.ProductCategories.FindAsync(id),
-                Products = products
+                Products = products,
+                ItemCount = await _shoppingService.GetItemCount(User.Identity.Name)
             };
 
             return View(categoryInfo);

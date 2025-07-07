@@ -31,6 +31,25 @@ public class ShoppingService
             .ToListAsync();
     }
 
+    public async Task<int> GetItemCount(string userName)
+    {
+        return await _context.ShoppingCartItems
+            .Where(i => i.ShoppingCart.Username != null && i.ShoppingCart.Username.Equals(userName))
+            .CountAsync();
+    }
+
+    public async Task<int> GetSpecificItemCount(string userName, string productName, ProductUnit unit)
+    {
+        var item = await _context.ShoppingCartItems
+            .FirstOrDefaultAsync(i => i.ShoppingCart.Username.Equals(userName)
+            && i.Name.Equals(productName)
+            && i.Unit == unit);
+
+        if (item == null) return 0;
+
+        return item.Count;
+    }
+
     public async Task<bool> AddToCart(string userName, string productName, ProductUnit unit, int count)
     {
         if (!_context.Products.Any(p => p.Name.Equals(productName) && p.Unit == unit))
@@ -78,7 +97,7 @@ public class ShoppingService
 
     public async Task<bool> RemoveFromCart(string userName, string productName, ProductUnit unit)
     {
-        var item = _context.ShoppingCartItems.FirstOrDefaultAsync(p =>
+        var item = await _context.ShoppingCartItems.FirstOrDefaultAsync(p =>
             p.ShoppingCart.Username.Equals(userName) &&
             p.Name.Equals(productName) &&
             p.Unit == unit
@@ -95,39 +114,44 @@ public class ShoppingService
         return true;
     }
 
-    /*
-    public async Task<bool> PlaceOrder(string userName)
+    public async Task<bool> ClearCart(string userName)
     {
-        var shoppingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(c => c.Username.Equals(userName));
+        var items = await _context.ShoppingCartItems.Where(i => i.ShoppingCart.Username.Equals(userName)).ToListAsync();
 
-        if (shoppingCart == null)
-        {
-            return false;
-        }
-
-        var items = await _context.ShoppingCartItems.Where(i => i.ShoppingCart.ShoppingCartId == shoppingCart.ShoppingCartId).ToListAsync();
         foreach (var item in items)
         {
-            var product = await _context.Products.FindAsync(item.ProductId);
-            if (product == null)
-            {
-                return false;
-            }
-
-            product.Quantity -= item.Count;
-            if (product.Quantity < 0)
-            {
-                product.Quantity = 0;
-            }
-            _context.Update(product);
-            _context.Remove(item);
-            await _context.SaveChangesAsync();
+            bool success = await RemoveFromCart(userName, item.Name, item.Unit);
+            if (!success) return false;
         }
-
-        _context.Remove(shoppingCart);
-        await _context.SaveChangesAsync();
 
         return true;
     }
-    */
+
+    public async Task<Order> PlaceOrder(string userName)
+    {
+        var items = await _context.ShoppingCartItems.Where(i => i.ShoppingCart.Username.Equals(userName)).ToListAsync();
+        Order order = new Order
+        {
+            CreatedDt = DateTime.Now,
+            Status = Order.OrderStatus.pending,
+            Requester = userName
+        };
+        _context.Add(order);
+
+        foreach (var item in items)
+        {
+            item.ShoppingCart = null;
+            item.Order = order;
+        }
+
+        var cart = await _context.ShoppingCarts.FirstOrDefaultAsync(i => i.Username.Equals(userName));
+        if (cart == null)
+        {
+            return null;
+        }
+        _context.Remove(cart);
+
+        await _context.SaveChangesAsync();
+        return order;
+    }
 }

@@ -11,11 +11,13 @@ public class OrdersController : Controller
 {
     private InventoryDbContext _context;
     private ShoppingService _shoppingService;
+    private OrderService _orderService;
 
-    public OrdersController(InventoryDbContext context, ShoppingService shoppingService)
+    public OrdersController(InventoryDbContext context, ShoppingService shoppingService, OrderService orderService)
     {
         _context = context;
         _shoppingService = shoppingService;
+        _orderService = orderService;
     }
 
     [Route("/Cart")]
@@ -29,9 +31,11 @@ public class OrdersController : Controller
     }
 
     [ActionName("AddToCart")]
-    [Route("/AddToCart")]
+    // [Route("/AddToCart")]
     public async Task<IActionResult> AddToCart(AddToCartView view)
     {
+        view.Count = await _shoppingService.GetSpecificItemCount(User.Identity.Name, view.ProductName, view.Unit);
+
         return View(view);
     }
 
@@ -41,22 +45,48 @@ public class OrdersController : Controller
         bool success = await _shoppingService.AddToCart(User.Identity?.Name, view.ProductName, view.Unit, view.Count);
         if (success)
         {
-            return NoContent();
+            return Redirect($"/Categories/{view.CategoryId}");
         }
-        return BadRequest("something went wrong");
+        return NotFound("Invalid product name/unit.");
     }
 
-    /*
     [HttpPost]
-    [Route("/PlaceOrder")]
-    public async Task<IActionResult> PlaceOrder(string userName)
+    public async Task<IActionResult> DeleteItem(string productName, ProductUnit unit)
     {
-        bool success = await _shoppingService.PlaceOrder(userName);
+        bool success = await _shoppingService.RemoveFromCart(User.Identity?.Name, productName, unit);
         if (success)
         {
-            return Ok("it worked");
+            return RedirectToAction(nameof(Cart));
         }
-        return BadRequest("something went wrong");
+        return NotFound("Invalid product name/unit.");
     }
-    */
+
+    [HttpPost]
+    public async Task<IActionResult> ClearCart()
+    {
+        bool success = await _shoppingService.ClearCart(User.Identity?.Name);
+        if (success)
+        {
+            return RedirectToAction(nameof(Cart));
+        }
+        return NotFound("One of your cart items was invalid!");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PlaceOrder()
+    {
+        Order order = await _shoppingService.PlaceOrder(User.Identity?.Name);
+        if (order != null)
+        {
+            return RedirectToAction(nameof(OrderConfirmed), order);
+        }
+        return NotFound("something went wrong, user's cart may not exist");
+    }
+
+    public async Task<IActionResult> OrderConfirmed(Order order)
+    {
+        ViewData["items"] = await _orderService.ListOrderItems(order.OrderId);
+
+        return View(order);
+    }
 }
