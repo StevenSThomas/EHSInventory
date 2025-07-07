@@ -10,7 +10,9 @@ namespace EHSInventory.Models
         Box = 1,
         Case = 2,
         Pack = 3,
-        Roll=4
+        Roll = 4,
+        Bulk = 5,
+        Pair = 6
     }
 
     public class Product
