@@ -18,5 +18,8 @@ namespace EHSInventory.Models
         public DbSet<Product> Products => Set<Product>();
         public DbSet<ProductHistory> ProductHistories => Set<ProductHistory>();
         public DbSet<CategoryHistory> CategoryHistories => Set<CategoryHistory>();
+        public DbSet<ShoppingCart> ShoppingCarts => Set<ShoppingCart>();
+        public DbSet<ShoppingCartItem> ShoppingCartItems => Set<ShoppingCartItem>();
+        public DbSet<Order> Orders => Set<Order>();
     }
 }

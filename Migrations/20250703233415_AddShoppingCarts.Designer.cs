@@ -3,6 +3,7 @@ using System;
 using EHSInventory.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHSInventory.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    partial class InventoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250703233415_AddShoppingCarts")]
+    partial class AddShoppingCarts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
@@ -47,27 +50,6 @@ namespace EHSInventory.Migrations
                     b.HasKey("CategoryHistoryId");
 
                     b.ToTable("CategoryHistories");
-                });
-
-            modelBuilder.Entity("EHSInventory.Models.Order", b =>
-                {
-                    b.Property<long>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedDt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Requester")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("EHSInventory.Models.Product", b =>
@@ -196,9 +178,6 @@ namespace EHSInventory.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<long?>("ShoppingCartId")
                         .HasColumnType("INTEGER");
 
@@ -206,8 +185,6 @@ namespace EHSInventory.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ShoppingCartItemId");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("ShoppingCartId");
 
@@ -225,22 +202,11 @@ namespace EHSInventory.Migrations
 
             modelBuilder.Entity("EHSInventory.Models.ShoppingCartItem", b =>
                 {
-                    b.HasOne("EHSInventory.Models.Order", "Order")
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId");
-
                     b.HasOne("EHSInventory.Models.ShoppingCart", "ShoppingCart")
                         .WithMany()
                         .HasForeignKey("ShoppingCartId");
 
-                    b.Navigation("Order");
-
                     b.Navigation("ShoppingCart");
-                });
-
-            modelBuilder.Entity("EHSInventory.Models.Order", b =>
-                {
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("EHSInventory.Models.ProductCategory", b =>

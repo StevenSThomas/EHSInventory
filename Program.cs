@@ -21,6 +21,8 @@ builder.Services.AddScoped<ImporterExporter>();
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ShoppingService>();
+builder.Services.AddScoped<OrderService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -41,6 +43,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "orders",
+    pattern: "Orders/{action}",
+    defaults: new { controller = "Orders", action = "Index" }
+);
 
 app.MapControllerRoute(
     name: "default",

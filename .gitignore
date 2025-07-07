@@ -5,6 +5,8 @@
 
 ReorderTest.http
 SetQuantityTest.http
+AddToCartTest.http
+PlaceOrderTest.http
 
 # dotenv files
 .env

@@ -1,0 +1,43 @@
+@model EHSInventory.Models.CartView
+
+<a href="/Categories">Return to products page</a>
+<h1>Shopping cart</h1>
+
+<table>
+    <thead>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Count</th>
+        <th>Delete Item</th>
+    </thead>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Unit
+            </td>
+            <td>
+                @item.Count
+            </td>
+            <td>
+                <form asp-action="DeleteItem" class="form-group">
+                    <input type="hidden" name="productName" value="@item.Name">
+                    <input type="hidden" name="unit" value="@item.Unit">
+
+                    <input type="submit" value="Delete" class="btn btn-primary" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<form asp-action="ClearCart" class="form-group">
+    <input type="submit" value="Clear cart" class="btn btn-primary" />
+</form>
+
+<form asp-action="PlaceOrder" class="form-group">
+    <input type="submit" value="Place order" class="btn btn-primary" />
+</form>

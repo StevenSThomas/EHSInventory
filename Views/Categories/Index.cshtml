@@ -30,44 +30,59 @@
         </ul>
     </nav>
     <main>
-        <h1 style="padding-bottom: 20px;">@Model.CurrentCategory.Name</h1>
-        <a class="addProduct" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
-            <img src="~/icons/Add.svg">
-            <span>Add Product</span>
-        </a>
-        <table class="table">
+        @if (User.IsInRole("Product Requester")) { <a href="/Cart">Cart - @Model.ItemCount items</a> }
+        <h1>@Model.CurrentCategory.Name</h1>
+        @if (User.IsInRole("Safety Officer")) {
+            <a class="addProduct" href="/Categories/@Model.CurrentCategory.ProductCategoryId/Add">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
+                <span>Add Product</span>
+            </a>
+        }
+        <table class="products-table">
             <thead>
                 <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
+                    @if (User.IsInRole("Safety Officer")) { <th>Item (Click to view details)</th> }
+                    else { <th>Item (click to view and order)</th> }
+                    @if (User.IsInRole("Safety Officer")) { <th class="quantity-col">Quantity</th> }
                     <th>Unit</th>
-                    <th>Expiration Date</th>
-                    <th></th>
+                    @if (User.IsInRole("Safety Officer")) { <th>Expiration Date</th> }
                 </tr>
             </thead>
             <tbody>
                 @foreach (var product in Model.Products) {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => product.Name)
+                        @if (User.IsInRole("Safety Officer")) 
+                        {
+                            <a href="/Products/@product.ProductId">
+                                @Html.DisplayFor(modelItem => product.Name)
+                            </a>
+                        }
+                        else
+                        {
+                            @Html.ActionLink(product.Name, "AddToCart", "Orders", new AddToCartView
+                            {
+                                CategoryId = Model.CurrentCategory.ProductCategoryId,
+                                ProductName = product.Name,
+                                Unit = product.Unit
+                            })
+                        }
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => product.Quantity)
-                    </td>
+                    @if (User.IsInRole("Safety Officer"))
+                    {
+                        <td class="quantity-col">
+                            @Html.DisplayFor(modelItem => product.Quantity)
+                        </td>
+                    }
                     <td>
                         @Html.DisplayFor(modelItem => product.Unit)
                     </td>
-                    <td>
-                        @(product.ExpirationDate?.ToString("MM/dd/yyyy"))
-                    </td>
-                    <td class="itemFunctions">
-                        <a href="/Products/@product.ProductId">
-                            <img src="~/icons/Edit.svg">
-                        </a>
-                        <a href="/Products/@product.ProductId/Delete">
-                            <img src="~/icons/Delete.svg">
-                        </a>
-                    </td>
+                    @if (User.IsInRole("Safety Officer"))
+                    {
+                        <td>
+                            @(product.ExpirationDate?.ToString("MM/dd/yyyy"))
+                        </td>
+                    }
                 </tr>
             }
             </tbody>
