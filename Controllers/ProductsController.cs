@@ -94,7 +94,9 @@ public class ProductsController : Controller
         SetQuantityView view = new SetQuantityView
         {
             ProductId = id,
-            ProductName = product.Name
+            ProductName = product.Name,
+            NewQuantity = product.Quantity,
+            Unit = product.Unit
         };
 
         return View(view);
