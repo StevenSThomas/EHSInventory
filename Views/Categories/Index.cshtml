@@ -29,7 +29,7 @@
             }
         </ul>
     </nav>
-    <main>
+    <header>
         @if (User.IsInRole("Product Requester")) { <a href="/Cart">Cart - @Model.ItemCount items</a> }
         <h1>@Model.CurrentCategory.Name</h1>
         @if (User.IsInRole("Safety Officer")) {
@@ -38,6 +38,8 @@
                 <span>Add Product</span>
             </a>
         }
+    </header>
+    <main>
         <table class="products-table">
             <thead>
                 <tr>
