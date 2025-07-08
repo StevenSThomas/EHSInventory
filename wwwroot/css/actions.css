@@ -35,7 +35,15 @@ main{
     gap: 15px;
 }
 h1{
+    text-wrap: nowrap;
     margin-bottom: 20px;
+    a{
+        text-decoration: none;
+        color: var(--text-clr);
+    }
+    a:hover{
+        text-decoration: underline;
+    }
 }
 form{
     display: flex;
@@ -44,32 +52,31 @@ form{
 }
 .field{
     padding: 0 0 0 0;
+    input{
+        font: inherit;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: solid 1px var(--line-clr);
+        width: 50rem;
+        height: 2rem;
+        padding: 4px 8px;
+    }
+    input::placeholder{
+        color: var(--text-clr);
+        opacity: 0.5;
+    }
+    .value{
+        font: inherit;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: solid 1px var(--line-clr);
+        width: 50rem;
+        height: 2rem;
+        padding: 4px 8px;
+    }
 }
 .field label, .quantity label, .unit label{
     font-size: 0.8rem;
-}
-.field input{
-    font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
-    width: 50rem;
-    max-width: 50rem;
-    height: 2rem;
-    padding: 4px 8px;
-}
-.field input::placeholder{
-    color: var(--text-clr);
-    opacity: 0.5;
-}
-.field .value{
-    font: inherit;
-    box-sizing: border-box;
-    border-radius: 5px;
-    border: solid 1px var(--line-clr);
-    width: 50rem;
-    height: 2rem;
-    padding: 4px 8px;
 }
 .quantity input, .unit select{
     font: inherit;
@@ -97,13 +104,12 @@ form{
     width: 50rem;
     height: 10rem;
     padding: 4px 8px;
+    margin-bottom: 20px;
     resize: none;
 }
 .buttons{
     display: flex;
-    align-items: center;
     gap: 50px;
-    margin-top: 20px;
 }
 .submit{
     border-style: solid;

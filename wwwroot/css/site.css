@@ -10,6 +10,8 @@
     --hover-clr: #6ae6ff86;
     --text-clr: #000000;
     --accent-clr: #6ae6ff;
+    --error-clr: #ff3030;
+    --error-hvr: #ff303086;
 }
 *{
     margin: 0;
@@ -17,6 +19,7 @@
 }
 html{
     font-family: Poppins;
+    color: var(--text-clr);
     line-height: 1.5rem;
 }
 body{
@@ -26,11 +29,46 @@ body{
     color: var(--text-clr);
     display: grid;
     grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+    "navbar header"
+    "navbar table"
+}
+header{
+    grid-area: header;
+    padding: 30px 30px 20px 30px;
 }
 main{
-    padding: min(30px, 7%)
+    grid-area: table;
+    padding: 0 30px 30px 30px;
+}
+#top-bar{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    gap: 700px;
+    margin-bottom: 20px;
+    h1{
+        text-wrap: nowrap;
+    }
+    #logout{
+        text-wrap: nowrap;
+        text-decoration: none;
+        color: var(--text-clr);
+        padding: 5px;
+        background-color: var(--error-hvr);
+        border-style: solid;
+        border-color: var(--line-clr);
+        border-radius: 5px;
+        border-width: 2px;
+        transition: 150ms ease;
+    }
+    #logout:hover{
+        background-color: var(--error-clr);
+    }
 }
 #sidebar{
+    grid-area: navbar;
     box-sizing: border-box;
     height: 100vh;
     width: 301px;
@@ -45,7 +83,7 @@ main{
 #sidebar ul{
     list-style: none;
 }
-#sidebar > ul >li:first-child{
+#sidebar > ul > li:first-child{
     display: flex;
     justify-content: flex-start;
     .logo{
@@ -59,7 +97,7 @@ main{
         fill: var(--accent-clr);
     }
 }
-#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+#sidebar a, #sidebar .logo{
     border-radius: .5em;
     padding: .85em;
     text-decoration: none;
@@ -72,20 +110,16 @@ main{
     flex-shrink: 0;
     fill: var(--text-clr);
 }
-#sidebar a span, #sidebar .dropdown-btn span{
+#sidebar a span{
     flex-grow: 1;
 }
-#sidebar a:hover, #sidebar .dropdown-btn:hover{
+#sidebar a:hover{
     background-color: var(--hover-clr);
 }
-h1{
-    margin-bottom: 20px;
-}
-.addProduct{
+.add-product{
     color: var(--text-clr);
     text-decoration: none;
     padding: 5px;
-    margin-bottom: 15px;
     background-color: var(--hover-clr);
     border-style: solid;
     border-color: var(--line-clr);
@@ -99,29 +133,29 @@ h1{
       padding-right: 0.2em;
     }
 }
-.addProduct:hover{
+.add-product:hover{
     background-color: var(--accent-clr);
 }
-.products-table{
+#products-table{
     text-align: left;
     width: 900px;
     border-collapse: collapse;
-}
-.products-table tr{
-    border-bottom: 1px solid var(--line-clr);
-}
-.products-table th, td{
-    padding: 0.5em 0.25em;
-}
-.products-table a{
-    color: var(--text-clr);
-    text-decoration: none;
-}
-.products-table a:hover{
-    color: var(--text-clr);
-    text-decoration: underline;
-}
-.products-table .quantity-col{
-    text-align: right;
-    padding-right: 2rem;
+    tr{
+        border-bottom: 1px solid var(--line-clr);
+    }
+    th, td{
+        padding: 0.5em 0.25em;
+    }
+    a{
+        color: var(--text-clr);
+        text-decoration: none;
+    }
+    a:hover{
+        color: var(--text-clr);
+        text-decoration: underline;
+    }
+    .quantity-col{
+        text-align: right;
+        padding-right: 2rem;
+    }
 }

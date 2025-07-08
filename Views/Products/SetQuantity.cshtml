@@ -6,14 +6,14 @@
 <body>
     <main>
         <div class="wrapper">
-            <h1>Edit quantity for @Model.ProductName</h1>
+            <h1><a href="/Categories/@Model.CategoryId">@Model.CategoryName</a> > <a href="/Products/@Model.ProductId">@Model.ProductName</a> > Edit Quantity</h1>
 
             <form asp-action="SetQuantity">
                 <input type="hidden" asp-for="ProductId" value="@Model.ProductId"/>
                 <input type="hidden" asp-for="ProductName" value="@Model.ProductName"/>
                 <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
                 <input type="hidden" asp-for="CategoryName" value="@Model.CategoryName"/>
-                
+
                 <div class="field">
                     <label asp-for="NewQuantity">New Quantity</label><br/>
                     <input asp-for="NewQuantity"/><br/>

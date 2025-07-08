@@ -1,43 +1,55 @@
 @model EHSInventory.Models.CartView
 
-<a href="/Categories">Return to products page</a>
-<h1>Shopping cart</h1>
+<head>
+    <link rel="stylesheet" href="~/css/cart.css">
+</head>
+<body>
+    <main>
+        <h1>Shopping cart</h1>
 
-<table>
-    <thead>
-        <th>Name</th>
-        <th>Unit</th>
-        <th>Count</th>
-        <th>Delete Item</th>
-    </thead>
-    @foreach (var item in Model.Items)
-    {
-        <tr>
-            <td>
-                @item.Name
-            </td>
-            <td>
-                @item.Unit
-            </td>
-            <td>
-                @item.Count
-            </td>
-            <td>
-                <form asp-action="DeleteItem" class="form-group">
-                    <input type="hidden" name="productName" value="@item.Name">
-                    <input type="hidden" name="unit" value="@item.Unit">
+        <table id="cart-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th class="quantity-col">Quantity</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Unit
+                        </td>
+                        <td class="quantity-col">
+                            @item.Count
+                        </td>
+                        <td>
+                            <form asp-action="DeleteItem" class="form-group">
+                                <input type="hidden" name="productName" value="@item.Name">
+                                <input type="hidden" name="unit" value="@item.Unit">
 
-                    <input type="submit" value="Delete" class="btn btn-primary" />
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+                                <input type="submit" value="Remove" class="remove"/>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="buttons">
+            <a class="continue" href="/Categories">Continue browsing</a>
+            <form asp-action="ClearCart" class="form-group">
+                <input type="submit" value="Clear cart" class="cart-action"/>
+            </form>
 
-<form asp-action="ClearCart" class="form-group">
-    <input type="submit" value="Clear cart" class="btn btn-primary" />
-</form>
-
-<form asp-action="PlaceOrder" class="form-group">
-    <input type="submit" value="Place order" class="btn btn-primary" />
-</form>
+            <form asp-action="PlaceOrder" class="form-group">
+                <input type="submit" value="Place order" class="cart-action"/>
+            </form>
+        </div>
+    </main>
+</body>

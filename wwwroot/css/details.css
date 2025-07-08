@@ -52,6 +52,7 @@ aside{
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    padding: 10px;
     margin-bottom: 20px;
 }
 .action{
@@ -77,8 +78,8 @@ aside{
     background-color: var(--accent-clr);
 }
 h1{
+    text-wrap: nowrap;
     padding: 10px;
-    margin-bottom: 20px;
     a{
         color: var(--text-clr);
         text-decoration: none;
