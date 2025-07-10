@@ -37,10 +37,21 @@ body{
     align-items: center;
     justify-content: center;
 }
-h1{
-    font-size: 3rem;
-    font-weight: 900;
+#heading{
     margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    img{
+        flex-shrink: 0;
+        width: 80px;
+    }
+    h1{
+        font-size: 3rem;
+        font-weight: 900;
+    }
 }
 form{
     width: 400px;

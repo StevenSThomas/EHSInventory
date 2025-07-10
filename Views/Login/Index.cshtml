@@ -1,10 +1,14 @@
 @model EHSInventory.Models.LoginView
 <head>
     <link rel="stylesheet" href="~/css/login.css">
+    <link rel="icon" href="~/icons/Logo.png">
 </head>
 <body>
     <div class="wrapper">
-        <h1>EHS Inventory</h1>
+        <div id="heading">
+            <img src="~/icons/Logo.png" alt="DNS EHS Logo"/>
+            <h1>EHS Inventory</h1>
+        </div>
         <form asp-action="Index">
             <div class="field">
                 <label asp-for="Username">
