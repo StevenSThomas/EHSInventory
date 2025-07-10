@@ -46,12 +46,13 @@ main{
     flex-direction: row;
     display: flex;
     align-items: center;
-    gap: 700px;
+    width: 900px;
     margin-bottom: 20px;
     h1{
         text-wrap: nowrap;
     }
     #logout{
+        margin-left: auto;
         text-wrap: nowrap;
         text-decoration: none;
         color: var(--text-clr);
@@ -83,10 +84,16 @@ main{
 #sidebar ul{
     list-style: none;
 }
-#sidebar > ul > li:first-child{
+#sidebar .logo{
     display: flex;
     justify-content: flex-start;
-    .logo{
+    align-items: center;
+    gap: 1em;
+    padding: 0.85em;
+    img{
+        width: 24px;
+    }
+    span{
         font-weight: 600;
         font-size: 20px;
     }
@@ -97,7 +104,7 @@ main{
         fill: var(--accent-clr);
     }
 }
-#sidebar a, #sidebar .logo{
+#sidebar a{
     border-radius: .5em;
     padding: .85em;
     text-decoration: none;

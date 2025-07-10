@@ -6,8 +6,9 @@
 <body>
     <nav id="sidebar">
         <ul>
-            <li>
-                <span class="logo">EHS Inventory</span>
+            <li class="logo">
+                <img src="~/icons/Logo.png"/>
+                <span>EHS Inventory</span>
             </li>
             @foreach (var category in Model.AllCategories) {
                 @if (category.ProductCategoryId == Model.CurrentCategory.ProductCategoryId){
